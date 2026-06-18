@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Tools.DataSave;
-using Tools.Logger;
 using UnityEngine;
 using VContainer.Unity;
 using Newtonsoft.Json;
@@ -10,16 +7,15 @@ namespace Infrastructure.Player
 {
     public class PlayerDataManager : ITickable
     {
-        private const string PLAYER_DATA = "playerSave";
+        private const string PLAYER_DATA_KEY = "playerSave";
 
-        private const string MUTE = "MuteAudio";
-        private const string SOUNDS_MUTE = "MuteSounds";
-        private const string VIBARTIONS_MUTE = "MuteVibrations";
+        private const string MUSIC_MUTE_KEY = "MuteAudio";
+        private const string SOUNDS_MUTE_KEY = "MuteSounds";
+        private const string VIBARTIONS_MUTE_KEY = "MuteVibrations";
 
-        private readonly PersistentDataController _persistentDataController;
         public PlayerData PlayerData { get; private set; }
 
-        public event Action OnPlayerDataSetuped;
+        public event Action OnPlayerDataSetup;
 
         private bool _saveRequested;
 
@@ -51,53 +47,33 @@ namespace Infrastructure.Player
             }
         }
 
-        public int LocationInProgress
+        public bool IsMusicMuted
         {
-            get
-            {
-                if (PlayerData == null)
-                {
-                    Debug.LogError("Tried to get location from not loaded playerData");
-                    return 0;
-                }
-
-                return PlayerData.LocationInProgress;
-            }
-        }
-
-        public bool IsMuted
-        {
-            get => PlayerPrefs.GetInt(MUTE, 0) == 1;
-            set => PlayerPrefs.SetInt(MUTE, value ? 1 : 0);
+            get => PlayerPrefs.GetInt(MUSIC_MUTE_KEY, 0) == 1;
+            set => PlayerPrefs.SetInt(MUSIC_MUTE_KEY, value ? 1 : 0);
         }
 
         public bool IsSoundsMuted
         {
-            get => PlayerPrefs.GetInt(SOUNDS_MUTE, 0) == 1;
-            set => PlayerPrefs.SetInt(SOUNDS_MUTE, value ? 1 : 0);
+            get => PlayerPrefs.GetInt(SOUNDS_MUTE_KEY, 0) == 1;
+            set => PlayerPrefs.SetInt(SOUNDS_MUTE_KEY, value ? 1 : 0);
         }
         
         public bool IsVibrationsMuted
         {
-            get => PlayerPrefs.GetInt(VIBARTIONS_MUTE, 0) == 1;
-            set => PlayerPrefs.SetInt(VIBARTIONS_MUTE, value ? 1 : 0);
-        }
-
-        public PlayerDataManager()
-        {
-            _persistentDataController = new PersistentDataController(Application.persistentDataPath, PLAYER_DATA,
-                new UnityDebugLogger(), 1);
+            get => PlayerPrefs.GetInt(VIBARTIONS_MUTE_KEY, 0) == 1;
+            set => PlayerPrefs.SetInt(VIBARTIONS_MUTE_KEY, value ? 1 : 0);
         }
 
         public void LoadData()
         {
-            if (_persistentDataController.TryLoad(out var json))
+            if (PlayerPrefs.HasKey(PLAYER_DATA_KEY))
             {
                 try
                 {
-                    var playerData = JsonConvert.DeserializeObject<PlayerData>(json);
+                    var playerData = JsonConvert.DeserializeObject<PlayerData>(PlayerPrefs.GetString(PLAYER_DATA_KEY));
                     PlayerData = playerData;
-                    OnPlayerDataSetuped?.Invoke();
+                    OnPlayerDataSetup?.Invoke();
                     return;
                 }
                 catch (Exception e)
@@ -106,10 +82,10 @@ namespace Infrastructure.Player
                     Debug.LogException(e);
                 }
             }
-            
+           
             PlayerData = CreateDefaultPlayerData();
             
-            OnPlayerDataSetuped?.Invoke();
+            OnPlayerDataSetup?.Invoke();
         }
 
         public void SetSkipTutorialData()
@@ -146,19 +122,18 @@ namespace Infrastructure.Player
         {
             return new PlayerData
             {
-                CurrentBuildCurrency = 100,
-                LocationInProgress = 0,
                 CurrentLevel = 0,
                 IsMainLevels = true,
-                IsMainLocations = true,
                 CurrentLoopedLevel = 0,
             };
         }
 
         public void ClearPlayerData()
         {
-            _persistentDataController.ClearAllData();
-            PlayerPrefs.DeleteAll();
+            PlayerPrefs.DeleteKey(PLAYER_DATA_KEY);
+            PlayerPrefs.DeleteKey(MUSIC_MUTE_KEY);
+            PlayerPrefs.DeleteKey(SOUNDS_MUTE_KEY);
+            PlayerPrefs.DeleteKey(VIBARTIONS_MUTE_KEY);
         }
 
         void ITickable.Tick()
@@ -172,24 +147,15 @@ namespace Infrastructure.Player
 
         private void SaveDataInternal()
         {
-            if (!_persistentDataController.TrySaveData(JsonConvert.SerializeObject(PlayerData)))
-            {
-                Debug.LogError($"Can't save player data");
-            }
+            PlayerPrefs.SetString(PLAYER_DATA_KEY, JsonConvert.SerializeObject(PlayerData));
         }
     }
 
     [Serializable]
     public class PlayerData
     {
-        public int CurrentBuildCurrency;
-
         public bool IsMainLevels;
         public int CurrentLevel;
         public int CurrentLoopedLevel;
-
-        public int LocationInProgress;
-        public int LocationInProgressLooped;
-        public bool IsMainLocations;
     }
 }
