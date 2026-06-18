@@ -8,17 +8,19 @@ namespace Core.Level
     {
         private readonly LevelStorage _levelStorage;
         private readonly PlayerDataManager _playerDataManager;
-        private readonly GameConfigManager _gameConfigManager;
+        private readonly GameConfig _gameConfig;
+
+        public LevelModel CurrentLevelModel { get; private set; }
 
         public event Action PreLevelComplete;
         public event Action OnLevelComplete;
 
         public LevelService(LevelStorage levelStorage, PlayerDataManager playerDataManager,
-            GameConfigManager gameConfigManager)
+            GameConfig gameConfig)
         {
             _levelStorage = levelStorage;
             _playerDataManager = playerDataManager;
-            _gameConfigManager = gameConfigManager;
+            _gameConfig = gameConfig;
         }
 
         public LevelGameConfig GetCurrentLevelConfig()
@@ -26,20 +28,21 @@ namespace Core.Level
             if (_playerDataManager.PlayerData.IsMainLevels)
             {
                 //mod used just for safe
-                return FindConfigs(_gameConfigManager.GameConfig.Levels[
-                    _playerDataManager.CurrentLevel % _gameConfigManager.GameConfig.Levels.Count]);
+                return FindConfigs(_gameConfig.Levels[
+                    _playerDataManager.CurrentLevel % _gameConfig.Levels.Count]);
             }
 
-            return FindConfigs(_gameConfigManager.GameConfig.LoopedLevels[_playerDataManager.CurrentLoopedLevel % _gameConfigManager.GameConfig.LoopedLevels.Count]);
+            return FindConfigs(_gameConfig.LoopedLevels[_playerDataManager.CurrentLoopedLevel % _gameConfig.LoopedLevels.Count]);
         }
 
         public LevelGameConfig FindConfigs(LevelGameConfig gameConfigLevel)
         {
-            if (gameConfigLevel.LevelConfig == null)
-            {
-                gameConfigLevel.LevelConfig = _levelStorage.GetConfig(gameConfigLevel.ConfigId);
-            }
+            // if (gameConfigLevel.LevelConfig == null)
+            // {
+            //     gameConfigLevel.LevelConfig = _levelStorage.GetConfig(gameConfigLevel.ConfigId);
+            // }
             
+            CurrentLevelModel = new LevelModel(gameConfigLevel.LevelConfig);
             return gameConfigLevel;
         }
 
@@ -51,7 +54,7 @@ namespace Core.Level
             {
                 _playerDataManager.UpdateCurrentLevel(_playerDataManager.CurrentLevel + 1);
 
-                if (_playerDataManager.CurrentLevel >= _gameConfigManager.GameConfig.Levels.Count)
+                if (_playerDataManager.CurrentLevel >= _gameConfig.Levels.Count)
                 {
                     _playerDataManager.PlayerData.IsMainLevels = false;
                 }
@@ -60,7 +63,7 @@ namespace Core.Level
             {
                 _playerDataManager.UpdateCurrentLooperLevel(_playerDataManager.CurrentLoopedLevel + 1);
 
-                if (_playerDataManager.CurrentLevel < _gameConfigManager.GameConfig.Levels.Count)
+                if (_playerDataManager.CurrentLevel < _gameConfig.Levels.Count)
                 {
                     _playerDataManager.PlayerData.IsMainLevels = true;
                 }
@@ -81,7 +84,7 @@ namespace Core.Level
                 return 1;
             }
 
-            return 1 + _playerDataManager.CurrentLoopedLevel / _gameConfigManager.GameConfig.LoopedLevels.Count;
+            return 1 + _playerDataManager.CurrentLoopedLevel / _gameConfig.LoopedLevels.Count;
         }
     }
 }

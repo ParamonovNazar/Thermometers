@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: LevelStorage
   m_EditorClassIdentifier: Assembly-CSharp::Core.Level.LevelStorage
   Levels:
-  - {fileID: 11400000, guid: f641374994c837f4999f0e8c5cc345e4, type: 2}
+  - {fileID: 11400000, guid: c22d23100eb05ed44a6657aa2e9cd039, type: 2}

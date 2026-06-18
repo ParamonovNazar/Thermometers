@@ -10,13 +10,11 @@ namespace Infrastructure.StateMachine.Game
         private const float LOAD_PROGRESS_VALUE = 0.8f;
 
         private readonly GameStateMachine _gameStateMachine;
-        private readonly GameConfigManager _gameConfigManager;
         private readonly PlayerDataManager _playerDataManager;
         
-        public GameLoadingState(GameStateMachine gameStateMachine, GameConfigManager gameConfigManager, PlayerDataManager playerDataManager)
+        public GameLoadingState(GameStateMachine gameStateMachine, PlayerDataManager playerDataManager)
         {
             _gameStateMachine = gameStateMachine;
-            _gameConfigManager = gameConfigManager;
             _playerDataManager = playerDataManager;
         }
 

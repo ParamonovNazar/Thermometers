@@ -6,37 +6,40 @@ using UnityEngine;
 
 namespace Infrastructure.Configs
 {
-    public class GameConfig
+    [CreateAssetMenu(fileName = "GameConfig", menuName = "Config/GameConfig", order = 0)]
+    public class GameConfig : ScriptableObject
     {
-        public GameSettings Settings { get; set; }
+        [field: SerializeField] public GameSettings Settings { get; set; }
         public List<RewardInfo> Rewards { get; set; } = new List<RewardInfo>();
-        public List<LevelGameConfig> Levels { get; set; } = new List<LevelGameConfig>();
-        public List<LevelGameConfig> LoopedLevels { get; set; } = new List<LevelGameConfig>();
+        [field: SerializeField] public List<LevelGameConfig> Levels { get; set; } = new List<LevelGameConfig>();
+        [field: SerializeField] public List<LevelGameConfig> LoopedLevels { get; set; } = new List<LevelGameConfig>();
 
-        
+
         public RewardDto GetRewardForLevel(int levelIndex)
         {
-            foreach (var gameConfigLevel in Levels)
-            {
-                if (gameConfigLevel.LevelIndex == levelIndex)
-                {
-                    return gameConfigLevel.Reward;
-                }
-            }
-
-            Debug.LogError($"Cant find reward for level {levelIndex}");
-            return new RewardDto(new List<RewardItemDto>
-                {
-                    new RewardItemDto
-                    {
-                        Amount = 100,
-                        Payload = RewardItemDto.REWARD_1,
-                        RewardType = RewardType.Reward1
-                    }
-                }
-            );
+            return null;
+            
+            // foreach (var gameConfigLevel in Levels)
+            // {
+            //     if (gameConfigLevel.LevelIndex == levelIndex)
+            //     {
+            //         return gameConfigLevel.Reward;
+            //     }
+            // }
+            //
+            // Debug.LogError($"Cant find reward for level {levelIndex}");
+            // return new RewardDto(new List<RewardItemDto>
+            //     {
+            //         new RewardItemDto
+            //         {
+            //             Amount = 100,
+            //             Payload = RewardItemDto.REWARD_1,
+            //             RewardType = RewardType.Reward1
+            //         }
+            //     }
+            // );
         }
-        
+
         public bool IsRewardIdValid(string rewardId)
         {
             foreach (var rewardInfo in Rewards)
@@ -77,10 +80,10 @@ namespace Infrastructure.Configs
     [Serializable]
     public class LevelGameConfig
     {
-        public int LevelIndex { get; set; }
-        public RewardDto Reward { get; set; }
-        public string ConfigId { get; set; }
-        public LevelConfig LevelConfig { get; set; }
+        [field: SerializeField] public int LevelIndex { get; set; }
+        [field: SerializeField] public LevelConfig LevelConfig { get; set; }
+        // [field: SerializeField] public RewardDto Reward { get; set; }
+        // [field: SerializeField] public string ConfigId { get; set; }
     }
 
     [Serializable]

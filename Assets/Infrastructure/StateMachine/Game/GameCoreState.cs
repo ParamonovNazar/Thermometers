@@ -7,23 +7,23 @@ using VContainer.Unity;
 
 namespace Infrastructure.StateMachine.Game
 {
-    public class GameCoreState : IGameState, ITickable
+    public class GameCoreState : IGameState
     {
         private const string SCENE_NAME = "CoreScene";
 
         private readonly GameStateMachine _gameStateMachine;
         private readonly LevelService _levelService;
-        private readonly GameConfigManager _gameConfigManager;
+        
+        private LevelView _levelView;
 
         public LevelGameConfig CurrentLevelConfig { get; set; }
 
         public bool IsActive { get; private set; }
 
-        public GameCoreState(GameStateMachine gameStateMachine, LevelService levelService, GameConfigManager gameConfigManager)
+        public GameCoreState(GameStateMachine gameStateMachine, LevelService levelService)
         {
             _gameStateMachine = gameStateMachine;
             _levelService = levelService;
-            _gameConfigManager = gameConfigManager;
         }
 
         public void Enter()
@@ -52,6 +52,24 @@ namespace Infrastructure.StateMachine.Game
 
         private void LoadLevel(LevelGameConfig currentLevelConfig)
         {
+            _levelView = Object.FindAnyObjectByType<LevelView>();
+            if (_levelView != null)
+            {
+                _levelView.Initialize(_levelService.CurrentLevelModel, OnCellClicked);
+            }
+        }
+
+        private void OnCellClicked(Vector2Int coord)
+        {
+            if (!IsActive) return;
+            
+            _levelService.CurrentLevelModel.ToggleCell(coord);
+            _levelView.UpdateCell(coord);
+
+            if (_levelService.CurrentLevelModel.IsSolved())
+            {
+                Win();
+            }
         }
 
         private void Win()
@@ -64,17 +82,6 @@ namespace Infrastructure.StateMachine.Game
         public void Exit()
         {
             IsActive = false;
-        }
-
-        public void Tick()
-        {
-            if (!IsActive)
-            {
-                return;
-            }
-            
-            if (Input.GetKeyDown(KeyCode.E)) 
-                Win();
         }
     }
 }
