@@ -8,11 +8,15 @@ namespace Core.Level
         private readonly LevelConfig _config;
         private readonly CellState[,] _cellStates;
         private readonly Dictionary<Vector2Int, ThermometerData> _cellToThermometer;
+        
+        public event System.Action<ThermometerData, int> OnThermometerFillChanged;
+        public event System.Action OnLevelSolved;
 
         public int Width => _config.Width;
         public int Height => _config.Height;
         public int[] RowConstraints => _config.RowConstraints;
         public int[] ColumnConstraints => _config.ColumnConstraints;
+        public List<ThermometerData> Thermometers => _config.Thermometers;
 
         public LevelModel(LevelConfig config)
         {
@@ -143,6 +147,33 @@ namespace Core.Level
                 if (_cellStates[x, y] == CellState.Filled) filledCount++;
             }
             return filledCount == ColumnConstraints[x];
+        }
+
+        public bool TryGetThermometer(Vector2Int coord, out ThermometerData thermometer)
+        {
+            return _cellToThermometer.TryGetValue(coord, out thermometer);
+        }
+
+        public void SetThermometerFill(ThermometerData thermometer, int targetLength)
+        {
+            for (int i = 0; i < thermometer.Cells.Count; i++)
+            {
+                var cell = thermometer.Cells[i];
+                var newState = i < targetLength ? CellState.Filled : CellState.Empty;
+                _cellStates[cell.x, cell.y] = newState;
+            }
+            
+            OnThermometerFillChanged?.Invoke(thermometer, targetLength);
+            
+            CheckWin();
+        }
+
+        private void CheckWin()
+        {
+            if (IsSolved())
+            {
+                OnLevelSolved?.Invoke();
+            }
         }
 
         private bool IsOutOfBounds(Vector2Int coord)

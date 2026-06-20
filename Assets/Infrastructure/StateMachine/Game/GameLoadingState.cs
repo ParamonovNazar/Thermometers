@@ -29,7 +29,7 @@ namespace Infrastructure.StateMachine.Game
 
             await InitializeServices();
             // await _environmentLoader.LoadLocation();
-            _gameStateMachine.Enter<GameMetaState>();
+            _gameStateMachine.Enter<GameCoreState>();
         }
 
         private async UniTask InitializeServices()

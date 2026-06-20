@@ -14,17 +14,20 @@ namespace Tools.EditorTools.Editor
         public static void CreateSampleLevel()
         {
             var levelConfig = ScriptableObject.CreateInstance<LevelConfig>();
-            
+
             // 3x3 simple puzzle
             // 1 2 1
             // 2 1 1
             // 1 1 2
-            
+
             var thermometers = new List<ThermometerData>
             {
-                new ThermometerData(new List<Vector2Int> { new Vector2Int(0, 0), new Vector2Int(0, 1), new Vector2Int(0, 2) }),
-                new ThermometerData(new List<Vector2Int> { new Vector2Int(1, 0), new Vector2Int(1, 1), new Vector2Int(1, 2) }),
-                new ThermometerData(new List<Vector2Int> { new Vector2Int(2, 0), new Vector2Int(2, 1), new Vector2Int(2, 2) })
+                new ThermometerData(new List<Vector2Int>
+                    { new Vector2Int(0, 0), new Vector2Int(0, 1), new Vector2Int(0, 2) }, Color.green),
+                new ThermometerData(new List<Vector2Int>
+                    { new Vector2Int(1, 0), new Vector2Int(1, 1), new Vector2Int(1, 2) }, Color.green),
+                new ThermometerData(new List<Vector2Int>
+                    { new Vector2Int(2, 0), new Vector2Int(2, 1), new Vector2Int(2, 2) }, Color.green)
             };
 
             // Use reflection or change LevelConfig to allow setting fields for this tool if they are private
@@ -33,7 +36,7 @@ namespace Tools.EditorTools.Editor
             so.FindProperty("<Id>k__BackingField").stringValue = "sample_3x3";
             so.FindProperty("<Width>k__BackingField").intValue = 3;
             so.FindProperty("<Height>k__BackingField").intValue = 3;
-            
+
             var rowConstraints = so.FindProperty("<RowConstraints>k__BackingField");
             rowConstraints.arraySize = 3;
             rowConstraints.GetArrayElementAtIndex(0).intValue = 2; // Row 0 (bottom)
@@ -45,9 +48,9 @@ namespace Tools.EditorTools.Editor
             colConstraints.GetArrayElementAtIndex(0).intValue = 1; // Col 0
             colConstraints.GetArrayElementAtIndex(1).intValue = 2; // Col 1
             colConstraints.GetArrayElementAtIndex(2).intValue = 2; // Col 2
-            
+
             so.ApplyModifiedProperties();
-            
+
             // List<ThermometerData> is harder via serializedProperty if we don't want to loop a lot
             // But LevelConfig.Thermometers has a public getter, but private setter.
             // Let's just use reflection for simplicity in a tool
@@ -55,7 +58,7 @@ namespace Tools.EditorTools.Editor
 
             AssetDatabase.CreateAsset(levelConfig, "Assets/Core/Level/SampleLevel.asset");
             AssetDatabase.SaveAssets();
-            
+
             Selection.activeObject = levelConfig;
         }
 

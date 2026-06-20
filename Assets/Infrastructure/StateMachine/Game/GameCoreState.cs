@@ -14,7 +14,7 @@ namespace Infrastructure.StateMachine.Game
         private readonly GameStateMachine _gameStateMachine;
         private readonly LevelService _levelService;
         
-        private LevelView _levelView;
+        private LevelContext _levelContext;
 
         public LevelGameConfig CurrentLevelConfig { get; set; }
 
@@ -52,28 +52,24 @@ namespace Infrastructure.StateMachine.Game
 
         private void LoadLevel(LevelGameConfig currentLevelConfig)
         {
-            _levelView = Object.FindAnyObjectByType<LevelView>();
-            if (_levelView != null)
+            _levelContext = Object.FindAnyObjectByType<LevelContext>();
+            if (_levelContext != null)
             {
-                _levelView.Initialize(_levelService.CurrentLevelModel, OnCellClicked);
-            }
-        }
-
-        private void OnCellClicked(Vector2Int coord)
-        {
-            if (!IsActive) return;
-            
-            _levelService.CurrentLevelModel.ToggleCell(coord);
-            _levelView.UpdateCell(coord);
-
-            if (_levelService.CurrentLevelModel.IsSolved())
-            {
-                Win();
+                var model = _levelService.CurrentLevelModel;
+                _levelContext.LevelView.Initialize(model);
+                _levelContext.InputController.Initialize(model);
+                
+                model.OnLevelSolved += Win;
             }
         }
 
         private void Win()
         {
+            if (_levelService.CurrentLevelModel != null)
+            {
+                _levelService.CurrentLevelModel.OnLevelSolved -= Win;
+            }
+            
             _levelService.CompleteLevel();
             TransitionScreen.Instance.Show().Forget(Debug.LogException);
             _gameStateMachine.Enter<GameCoreEndState>();
