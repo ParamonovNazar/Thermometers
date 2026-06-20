@@ -101,10 +101,6 @@ namespace Core.Level
                 }
             }
 
-            // Align thermometer view root to the grid
-            LayoutRebuilder.ForceRebuildLayoutImmediate(gridRectTransform);
-            _thermometerViewRoot.position = Cells[0, 0].transform.position;
-
             // Input overlay alignment
             if (_inputOverlay != null)
             {
@@ -116,8 +112,8 @@ namespace Core.Level
             }
 
             // Thermometers
-            
-            
+            LayoutRebuilder.ForceRebuildLayoutImmediate(gridRectTransform);
+            _thermometerViewRoot.position = Cells[0, 0].transform.position;
             
             float stepSize = cellSize + _gridLayout.spacing.x;
             foreach (var thermometerData in model.Thermometers)

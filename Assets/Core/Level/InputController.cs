@@ -9,6 +9,7 @@ namespace Core.Level
         [SerializeField] private RectTransform _rectTransform;
 
         private LevelModel _levelModel;
+        private ThermometerData _currentThermometer;
 
         [field: SerializeField] public FillType FillType { get; set; } = FillType.Standard;
         [field: SerializeField] public DrawType DrawType { get; set; } = DrawType.Fill;
@@ -24,36 +25,38 @@ namespace Core.Level
             {
                 if (_levelModel.TryGetThermometer(cellPosition, out var thermometer))
                 {
+                    _currentThermometer = thermometer;
                     bool isFilled = _levelModel.GetCellState(cellPosition) == CellState.Filled;
                     DrawType = isFilled ? DrawType.Remove : DrawType.Fill;
 
-                    var drawModifier = DrawType == DrawType.Remove ? 0 : 1;
-
-                    var length = Mathf.Max(0, thermometer.GetLengthToCell(cellPosition) + drawModifier);
-
-                    _levelModel.SetThermometerFill(thermometer, length);
+                    UpdateThermometerFill(thermometer, cellPosition);
                 }
             }
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            _currentThermometer = null;
         }
 
         public void OnPointerMove(PointerEventData eventData)
         {
-            // if (eventData.dragging)
-            // {
-            //     if (TryFindCell(eventData, out var cellPosition))
-            //     {
-            //         if (_levelModel.TryGetThermometer(cellPosition, out var thermometer))
-            //         {
-            //             var length = thermometer.GetLengthToCell(cellPosition);
-            //
-            //             _levelModel.SetThermometerFill(thermometer, length);
-            //         }
-            //     }
-            // }
+            if (_currentThermometer == null) return;
+
+            if (TryFindCell(eventData, out var cellPosition))
+            {
+                if (_currentThermometer.Cells.Contains(cellPosition))
+                {
+                    UpdateThermometerFill(_currentThermometer, cellPosition);
+                }
+            }
+        }
+
+        private void UpdateThermometerFill(ThermometerData thermometer, Vector2Int cellPosition)
+        {
+            var drawModifier = DrawType == DrawType.Remove ? 0 : 1;
+            var length = Mathf.Max(0, thermometer.GetLengthToCell(cellPosition) + drawModifier);
+            _levelModel.SetThermometerFill(thermometer, length);
         }
 
         private bool TryFindCell(PointerEventData eventData, out Vector2Int cellPosition)
