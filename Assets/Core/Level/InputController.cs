@@ -67,8 +67,18 @@ namespace Core.Level
                 float normalizedX = (localPoint.x - rect.xMin) / rect.width;
                 float normalizedY = (localPoint.y - rect.yMin) / rect.height;
 
-                int x = Mathf.FloorToInt(normalizedX * _levelModel.Width);
-                int y = Mathf.FloorToInt(normalizedY * _levelModel.Height);
+                int gridWidth = _levelModel.Width + 1;
+                int gridHeight = _levelModel.Height + 1;
+
+                int xGrid = Mathf.FloorToInt(normalizedX * gridWidth);
+                int yGrid = Mathf.FloorToInt(normalizedY * gridHeight);
+
+                // xGrid: 0 is row constraint, 1..Width are level cells
+                // yGrid: 0..Height-1 are level cells, Height is column constraint
+                int x = xGrid - 1;
+                int y = yGrid;
+
+                // Debug.Log($"[DEBUG_LOG] Input at xGrid:{xGrid}, yGrid:{yGrid} -> x:{x}, y:{y}");
 
                 if (x >= 0 && x < _levelModel.Width && y >= 0 && y < _levelModel.Height)
                 {

@@ -32,10 +32,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6334390146051521427}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 12.5}
-  m_SizeDelta: {x: 30.8, y: 75}
+  m_SizeDelta: {x: -69.2, y: -25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9032021210134857279
 CanvasRenderer:
@@ -125,6 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd101f9c6fbd42dbb7b579da6c19477d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Level.Thermometer.ThermometerPartBase
+  _rootRectTransform: {fileID: 6334390146051521427}
   _fill: {fileID: 4098420962335615265}
 --- !u!1 &8513054255405572809
 GameObject:
@@ -158,10 +159,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6334390146051521427}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4956551439241364223
 CanvasRenderer:

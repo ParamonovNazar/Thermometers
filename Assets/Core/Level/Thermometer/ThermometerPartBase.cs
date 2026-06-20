@@ -5,6 +5,7 @@ namespace Core.Level.Thermometer
 {
     public class ThermometerPartBase : MonoBehaviour
     {
+        [SerializeField] private RectTransform _rootRectTransform;
         [SerializeField] private Image _fill;
 
         public float CurrentFillProgress { get; private set; }
@@ -15,6 +16,11 @@ namespace Core.Level.Thermometer
         {
             CurrentFillProgress= progress;
             _fill.fillAmount = progress;
+        }
+
+        public void SetSize(float cellSize)
+        {
+            _rootRectTransform.sizeDelta = new Vector2(cellSize, cellSize);
         }
     }
 }

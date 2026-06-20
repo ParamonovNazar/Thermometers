@@ -18,8 +18,7 @@ namespace Core.Level.Thermometer
 
         public int Length { get; private set; }
         public int CurrentFillIndex { get; private set; }
-
-
+        
         private CancellationTokenSource _fillCancellationTokenSource;
 
         public void Initialize(ThermometerData data, float cellSize)
@@ -54,6 +53,7 @@ namespace Core.Level.Thermometer
                     part.transform.localRotation = GetRotationForDirection(direction);
                 }
 
+                part.SetSize(cellSize);
                 part.SetFill(0);
                 _parts.Add(part);
             }

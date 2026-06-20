@@ -16,6 +16,9 @@ namespace Core.Level
         [SerializeField] private Transform _columnConstraintsParent;
         [SerializeField] private ThermometerView _thermometerViewPrefab;
         [SerializeField] private Transform _thermometerViewRoot;
+        [SerializeField] private RectTransform _inputOverlay;
+        [SerializeField] private RectTransform _playableArea;
+        [SerializeField] private float _spacingRatio = 0.125f;
         
         private LevelModel _model;
         private readonly Dictionary<ThermometerData, ThermometerView> _thermometerViews = new();
@@ -28,11 +31,7 @@ namespace Core.Level
         public void Initialize(LevelModel model)
         {
             _model = model;
-            _gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            _gridLayout.constraintCount = model.Width;
-
-            Cells = new CellView[model.Width, model.Height];
-
+            
             // Clear existing
             foreach (Transform child in _gridLayout.transform) Destroy(child.gameObject);
             foreach (Transform child in _rowConstraintsParent) Destroy(child.gameObject);
@@ -43,11 +42,58 @@ namespace Core.Level
 
             _model.OnThermometerFillChanged += HandleThermometerFillChanged;
 
-            // Create cells (Top-to-bottom for GridLayout default usually, 
-            // but we need to match our (0,0) bottom-left coordinate system)
-            // GridLayout usually fills row by row from top-left.
+            // Calculate layout
+            Rect rect = _playableArea.rect;
+            int gridWidthCount = model.Width + 1;
+            int gridHeightCount = model.Height + 1;
+
+            float spacingX = gridWidthCount > 1 ? (rect.width * _spacingRatio) / (gridWidthCount - 1) : 0;
+            float spacingY = gridHeightCount > 1 ? (rect.height * _spacingRatio) / (gridHeightCount - 1) : 0;
+            float spacing = Mathf.Min(spacingX, spacingY);
+            _gridLayout.spacing = new Vector2(spacing, spacing);
+
+            float totalSpacingX = gridWidthCount > 1 ? spacing * (gridWidthCount - 1) : 0;
+            float totalSpacingY = gridHeightCount > 1 ? spacing * (gridHeightCount - 1) : 0;
+
+            float cellWidth = (rect.width - totalSpacingX) / gridWidthCount;
+            float cellHeight = (rect.height - totalSpacingY) / gridHeightCount;
+            float cellSize = Mathf.Min(cellWidth, cellHeight);
+
+            _gridLayout.cellSize = new Vector2(cellSize, cellSize);
+            _gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            _gridLayout.constraintCount = gridWidthCount;
+
+            float gridWidth = cellSize * gridWidthCount + _gridLayout.spacing.x * (gridWidthCount - 1);
+            float gridHeight = cellSize * gridHeightCount + _gridLayout.spacing.y * (gridHeightCount - 1);
+
+            var gridRectTransform = _gridLayout.GetComponent<RectTransform>();
+            gridRectTransform.sizeDelta = new Vector2(gridWidth, gridHeight);
+
+            Cells = new CellView[model.Width, model.Height];
+            RowConstraints = new ConstraintView[model.Height];
+            ColumnConstraints = new ConstraintView[model.Width];
+
+            // Create grid elements
+            // Top row: Empty, then Column Constraints
+            GameObject emptyCell = Instantiate(_cellPrefab, _gridLayout.transform).gameObject;
+            emptyCell.name = "Empty_TopLeft";
+            // emptyCell.GetComponent<Image>().enabled = false; // Hide it instead of deactivating
+            if (emptyCell.TryGetComponent<CellView>(out var cellViewComp)) cellViewComp.enabled = false;
+            for (int x = 0; x < model.Width; x++)
+            {
+                var constraintView = Instantiate(_columnConstraintPrefab, _gridLayout.transform);
+                constraintView.Setup(0, model.ColumnConstraints[x]);
+                ColumnConstraints[x] = constraintView;
+            }
+
+            // Subsequent rows: Row Constraint, then Level Cells
             for (int y = model.Height - 1; y >= 0; y--)
             {
+                // Row constraint at the start of the row
+                var rowConstraintView = Instantiate(_rowConstraintPrefab, _gridLayout.transform);
+                rowConstraintView.Setup(0, model.RowConstraints[y]);
+                RowConstraints[y] = rowConstraintView;
+
                 for (int x = 0; x < model.Width; x++)
                 {
                     var cellView = Instantiate(_cellPrefab, _gridLayout.transform);
@@ -55,29 +101,30 @@ namespace Core.Level
                 }
             }
 
-            // Constraints
-            RowConstraints = new ConstraintView[model.Height];
-            for (int y = model.Height - 1; y >= 0; y--)
-            {
-                var constraintView = Instantiate(_rowConstraintPrefab, _rowConstraintsParent);
-                constraintView.Setup(0, model.RowConstraints[y]);
-                RowConstraints[y] = constraintView;
-            }
+            // Align thermometer view root to the grid
+            LayoutRebuilder.ForceRebuildLayoutImmediate(gridRectTransform);
+            _thermometerViewRoot.position = Cells[0, 0].transform.position;
 
-            ColumnConstraints = new ConstraintView[model.Width];
-            for (int x = 0; x < model.Width; x++)
+            // Input overlay alignment
+            if (_inputOverlay != null)
             {
-                var constraintView = Instantiate(_columnConstraintPrefab, _columnConstraintsParent);
-                constraintView.Setup(0, model.ColumnConstraints[x]);
-                ColumnConstraints[x] = constraintView;
+                _inputOverlay.sizeDelta = gridRectTransform.sizeDelta;
+                _inputOverlay.anchorMin = gridRectTransform.anchorMin;
+                _inputOverlay.anchorMax = gridRectTransform.anchorMax;
+                _inputOverlay.pivot = gridRectTransform.pivot;
+                _inputOverlay.anchoredPosition = gridRectTransform.anchoredPosition;
             }
 
             // Thermometers
-            float cellSize = _gridLayout.cellSize.x + _gridLayout.spacing.x;
+            
+            
+            
+            float stepSize = cellSize + _gridLayout.spacing.x;
             foreach (var thermometerData in model.Thermometers)
             {
                 var thermometerView = Instantiate(_thermometerViewPrefab, _thermometerViewRoot);
-                thermometerView.Initialize(thermometerData, cellSize);
+                thermometerView.Initialize(thermometerData, stepSize);
+                
                 Thermometers.Add(thermometerView);
                 _thermometerViews[thermometerData] = thermometerView;
             }
