@@ -8,7 +8,9 @@ namespace Core.Level.Thermometer
     public class ThermometerView : MonoBehaviour
     {
         [SerializeField] private ThermometerPartBase _blobPrefab;
-        [SerializeField] private ThermometerPartBase _bodyPrefab;
+        [SerializeField] private ThermometerPartBase _straightPrefab;
+        [SerializeField] private ThermometerPartBase _turnRightPrefab;
+        [SerializeField] private ThermometerPartBase _turnLeftPrefab;
         [SerializeField] private ThermometerPartBase _endPrefab;
 
         [SerializeField] private float _partFillTime = 0.1f;
@@ -36,34 +38,81 @@ namespace Core.Level.Thermometer
 
             for (int i = 0; i < Length; i++)
             {
-                ThermometerPartBase prefab = GetPrefabForIndex(i);
+                ThermometerPartBase prefab = GetPrefabForIndex(i, data.Cells);
                 ThermometerPartBase part = Instantiate(prefab, transform);
 
                 part.transform.localPosition = new Vector3(data.Cells[i].x * cellSize, data.Cells[i].y * cellSize, 0);
 
-                if (i < Length - 1)
+                if (i == 0)
                 {
-                    Vector2Int direction = data.Cells[i + 1] - data.Cells[i];
-                    part.transform.localRotation = GetRotationForDirection(direction);
+                    if (Length > 1)
+                    {
+                        Vector2Int direction = data.Cells[i + 1] - data.Cells[i];
+                        part.transform.localRotation = GetRotationForDirection(direction);
+                    }
                 }
-                else if (i > 0)
+                else if (i == Length - 1)
                 {
-                    // Last part follows previous direction
                     Vector2Int direction = data.Cells[i] - data.Cells[i - 1];
                     part.transform.localRotation = GetRotationForDirection(direction);
                 }
+                else
+                {
+                    Vector2Int prevDir = data.Cells[i] - data.Cells[i - 1];
+                    Vector2Int nextDir = data.Cells[i + 1] - data.Cells[i];
+
+                    if (prevDir == nextDir)
+                    {
+                        part.transform.localRotation = GetRotationForDirection(nextDir);
+                    }
+                    else
+                    {
+                        part.transform.localRotation = GetRotationForTurn(prevDir, nextDir);
+                    }
+                }
 
                 part.SetSize(cellSize);
+                part.Setup(data.Color);
                 part.SetFill(0);
                 _parts.Add(part);
             }
         }
 
-        private ThermometerPartBase GetPrefabForIndex(int index)
+        private ThermometerPartBase GetPrefabForIndex(int index, List<Vector2Int> cells)
         {
             if (index == 0) return _blobPrefab;
             if (index == Length - 1) return _endPrefab;
-            return _bodyPrefab;
+
+            Vector2Int prevDir = cells[index] - cells[index - 1];
+            Vector2Int nextDir = cells[index + 1] - cells[index];
+
+            if (prevDir == nextDir)
+            {
+                return _straightPrefab;
+            }
+
+            // Determine turn direction
+            // In 2D (XY plane), cross product of (x1, y1) and (x2, y2) is x1*y2 - y1*x2
+            int crossProduct = prevDir.x * nextDir.y - prevDir.y * nextDir.x;
+
+            return crossProduct < 0 ? _turnRightPrefab : _turnLeftPrefab;
+        }
+
+        private Quaternion GetRotationForTurn(Vector2Int prevDir, Vector2Int nextDir)
+        {
+            // Base rotation: Up -> Right/Left
+            if (prevDir == Vector2Int.up) return Quaternion.identity;
+
+            // Right -> Down/Up
+            if (prevDir == Vector2Int.right) return Quaternion.Euler(0, 0, -90);
+
+            // Down -> Left/Right
+            if (prevDir == Vector2Int.down) return Quaternion.Euler(0, 0, 180);
+
+            // Left -> Up/Down
+            if (prevDir == Vector2Int.left) return Quaternion.Euler(0, 0, 90);
+
+            return Quaternion.identity;
         }
 
         private Quaternion GetRotationForDirection(Vector2Int direction)
@@ -89,11 +138,15 @@ namespace Core.Level.Thermometer
                     for (int i = CurrentFillIndex; i < length; i++)
                     {
                         await FillPart(i, 1f, token);
+                        if (_fillCancellationTokenSource.IsCancellationRequested)
+                        {
+                            Debug.Log("Fill cancelled");
+                        }
                         if (CurrentFillIndex == _parts.Count - 1)
                         {
                             break;
                         }
-
+                    
                         CurrentFillIndex++;
                     }
                 }
@@ -101,8 +154,12 @@ namespace Core.Level.Thermometer
                 {
                     for (int i = CurrentFillIndex; i >= length; i--)
                     {
-                        await FillPart(i, 0f, token);
                         CurrentFillIndex = i;
+                        await FillPart(i, 0f, token);
+                        if (_fillCancellationTokenSource.IsCancellationRequested)
+                        {
+                            Debug.Log("deFill cancelled");
+                        }
                     }
                 }
             }
@@ -132,6 +189,10 @@ namespace Core.Level.Thermometer
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
 
+            if (token.IsCancellationRequested)
+            {
+                Debug.Log("FillPart cancelled");
+            }
             part.SetFill(targetFill);
         }
     }

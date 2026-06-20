@@ -49,6 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Level.Thermometer.ThermometerView
   _blobPrefab: {fileID: 6888711647736349152, guid: f8adf3a345c16944aa687d281c87866d, type: 3}
-  _bodyPrefab: {fileID: 7166502949757035025, guid: b9d2e04c8b3dfb4449629b698cae8ca8, type: 3}
+  _straightPrefab: {fileID: 7166502949757035025, guid: b9d2e04c8b3dfb4449629b698cae8ca8, type: 3}
+  _turnRightPrefab: {fileID: 7166502949757035025, guid: 1b77c184239ddaf49bd344014d431784, type: 3}
+  _turnLeftPrefab: {fileID: 7166502949757035025, guid: 0ed9135814301034182336bd9a9555ff, type: 3}
   _endPrefab: {fileID: 7241833045641563646, guid: 99fb2918def61a349ac76bb3d788fbef, type: 3}
   _partFillTime: 0.1
