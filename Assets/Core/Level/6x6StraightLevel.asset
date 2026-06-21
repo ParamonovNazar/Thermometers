@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53b53b3f754943a9bd6c2ed89ba26f74, type: 3}
+  m_Name: 6x6StraightLevel
+  m_EditorClassIdentifier: Assembly-CSharp::Core.Level.LevelConfig
+  <Id>k__BackingField: NewLevel
+  <Width>k__BackingField: 6
+  <Height>k__BackingField: 6
+  <RowConstraints>k__BackingField: 020000000300000004000000040000000100000003000000
+  <ColumnConstraints>k__BackingField: 040000000200000004000000030000000200000002000000
+  <Thermometers>k__BackingField:
+  - _cells:
+    - {x: 0, y: 5}
+    - {x: 0, y: 4}
+    - {x: 0, y: 3}
+    - {x: 0, y: 2}
+    - {x: 0, y: 1}
+    _color: {r: 0.20137754, g: 0.3861236, b: 0.94593227, a: 1}
+  - _cells:
+    - {x: 1, y: 5}
+    - {x: 1, y: 4}
+    - {x: 1, y: 3}
+    - {x: 1, y: 2}
+    - {x: 1, y: 1}
+    _color: {r: 0.061665066, g: 0.465416, b: 0.7778814, a: 1}
+  - _cells:
+    - {x: 2, y: 4}
+    - {x: 2, y: 5}
+    _color: {r: 0.98485875, g: 0.34586444, b: 0.297421, a: 1}
+  - _cells:
+    - {x: 3, y: 4}
+    - {x: 3, y: 5}
+    _color: {r: 0.30013493, g: 0.79416955, b: 0.53317076, a: 1}
+  - _cells:
+    - {x: 5, y: 5}
+    - {x: 4, y: 5}
+    _color: {r: 0.4775445, g: 0.32928494, b: 0.6181269, a: 1}
+  - _cells:
+    - {x: 5, y: 4}
+    - {x: 4, y: 4}
+    _color: {r: 0.8516903, g: 0.69060796, b: 0.1625147, a: 1}
+  - _cells:
+    - {x: 3, y: 3}
+    - {x: 2, y: 3}
+    _color: {r: 0.81361926, g: 0.75397146, b: 0.87620413, a: 1}
+  - _cells:
+    - {x: 2, y: 2}
+    - {x: 3, y: 2}
+    _color: {r: 0.7130813, g: 0.76391566, b: 0.8023225, a: 1}
+  - _cells:
+    - {x: 2, y: 1}
+    - {x: 2, y: 0}
+    _color: {r: 0.44062608, g: 0.5754501, b: 0.37378827, a: 1}
+  - _cells:
+    - {x: 3, y: 1}
+    - {x: 3, y: 0}
+    _color: {r: 0.31270364, g: 0.41857058, b: 0.4841985, a: 1}
+  - _cells:
+    - {x: 1, y: 0}
+    - {x: 0, y: 0}
+    _color: {r: 0.68814605, g: 0.05069471, b: 0.18058409, a: 1}
+  - _cells:
+    - {x: 4, y: 0}
+    - {x: 5, y: 0}
+    _color: {r: 0.017563583, g: 0.3559647, b: 0.3460143, a: 1}
+  - _cells:
+    - {x: 4, y: 3}
+    - {x: 4, y: 2}
+    - {x: 4, y: 1}
+    _color: {r: 0.09493865, g: 0.99052, b: 0.98807204, a: 1}
+  - _cells:
+    - {x: 5, y: 1}
+    - {x: 5, y: 2}
+    - {x: 5, y: 3}
+    _color: {r: 0.5958428, g: 0.8111105, b: 0.69502276, a: 1}
