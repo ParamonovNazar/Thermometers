@@ -14,14 +14,18 @@ namespace Core.Level.Thermometer
         [SerializeField] private ThermometerPartBase _endPrefab;
 
         [SerializeField] private float _partFillTime = 0.1f;
+        [SerializeField] private AnimationCurve _scaleCurve;
+        [SerializeField] private float _scaleTime = 0.2f;
+        [SerializeField] private float _scaleModifier = 1.1f;
 
         private List<ThermometerPartBase> _parts = new();
         private List<Vector2Int> _cellCoords = new();
 
         public int Length { get; private set; }
         public int CurrentFillIndex { get; private set; }
-        
+
         private CancellationTokenSource _fillCancellationTokenSource;
+        private CancellationTokenSource _scaleCancellationTokenSource;
 
         public void Initialize(ThermometerData data, float cellSize)
         {
@@ -74,6 +78,7 @@ namespace Core.Level.Thermometer
                 part.SetSize(cellSize);
                 part.Setup(data.Color);
                 part.SetFill(0);
+                part.SetScale(1f);
                 _parts.Add(part);
             }
         }
@@ -126,6 +131,8 @@ namespace Core.Level.Thermometer
 
         public async UniTask Fill(int length)
         {
+            ScaleAnimate().Forget();
+
             _fillCancellationTokenSource?.Cancel();
             _fillCancellationTokenSource?.Dispose();
             _fillCancellationTokenSource = new CancellationTokenSource();
@@ -142,11 +149,12 @@ namespace Core.Level.Thermometer
                         {
                             Debug.Log("Fill cancelled");
                         }
+
                         if (CurrentFillIndex == _parts.Count - 1)
                         {
                             break;
                         }
-                    
+
                         CurrentFillIndex++;
                     }
                 }
@@ -179,7 +187,7 @@ namespace Core.Level.Thermometer
                 return;
             }
 
-            float elapsed = 0;
+            float elapsed = targetFill > startFill ? startFill * _partFillTime : (1f - startFill) * _partFillTime;
             while (elapsed < _partFillTime)
             {
                 elapsed += Time.deltaTime;
@@ -193,7 +201,42 @@ namespace Core.Level.Thermometer
             {
                 Debug.Log("FillPart cancelled");
             }
+
             part.SetFill(targetFill);
+        }
+
+        private async UniTaskVoid ScaleAnimate()
+        {
+            _scaleCancellationTokenSource?.Cancel();
+            _scaleCancellationTokenSource?.Dispose();
+            _scaleCancellationTokenSource = new CancellationTokenSource();
+            var token = _scaleCancellationTokenSource.Token;
+
+            try
+            {
+                float elapsed = 0;
+                while (elapsed < _scaleTime)
+                {
+                    elapsed += Time.deltaTime;
+                    float progress = Mathf.Clamp01(elapsed / _scaleTime);
+                    float scaleValue = 1f + (_scaleCurve.Evaluate(progress) * _scaleModifier);
+
+                    foreach (var part in _parts)
+                    {
+                        part.SetScale(scaleValue);
+                    }
+
+                    await UniTask.Yield(PlayerLoopTiming.Update, token);
+                }
+
+                foreach (var part in _parts)
+                {
+                    part.SetScale(1f);
+                }
+            }
+            catch (System.OperationCanceledException)
+            {
+            }
         }
     }
 }

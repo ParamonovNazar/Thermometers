@@ -154,6 +154,23 @@ namespace Core.Level
             return _cellToThermometer.TryGetValue(coord, out thermometer);
         }
 
+        public int GetThermometerFill(ThermometerData thermometer)
+        {
+            int fill = 0;
+            foreach (var cell in thermometer.Cells)
+            {
+                if (_cellStates[cell.x, cell.y] == CellState.Filled)
+                {
+                    fill++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return fill;
+        }
+
         public void SetThermometerFill(ThermometerData thermometer, int targetLength)
         {
             for (int i = 0; i < thermometer.Cells.Count; i++)

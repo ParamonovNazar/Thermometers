@@ -1,5 +1,7 @@
+using Infrastructure.Services.Haptic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using VContainer;
 
 namespace Core.Level
 {
@@ -10,10 +12,17 @@ namespace Core.Level
 
         private LevelModel _levelModel;
         private ThermometerData _currentThermometer;
+        private IHapticService _hapticService;
 
         [field: SerializeField] public FillType FillType { get; set; } = FillType.Standard;
         [field: SerializeField] public DrawType DrawType { get; set; } = DrawType.Fill;
 
+        [Inject]
+        public void Constructor(IHapticService hapticService)
+        {
+            _hapticService = hapticService;
+        }
+        
         public void Initialize(LevelModel levelModel)
         {
             _levelModel = levelModel;
@@ -56,7 +65,15 @@ namespace Core.Level
         {
             var drawModifier = DrawType == DrawType.Remove ? 0 : 1;
             var length = Mathf.Max(0, thermometer.GetLengthToCell(cellPosition) + drawModifier);
+            
+            if (_levelModel.GetThermometerFill(thermometer) == length)
+            {
+                return;
+            }
+
             _levelModel.SetThermometerFill(thermometer, length);
+            
+            _hapticService.Play(HapticType.ThermometerInteraction);
         }
 
         private bool TryFindCell(PointerEventData eventData, out Vector2Int cellPosition)

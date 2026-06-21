@@ -1,26 +1,20 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Core.Level.Thermometer
 {
-    public class ThermometerPartBase : MonoBehaviour
+    public abstract class ThermometerPartBase : MonoBehaviour
     {
-        [SerializeField] private RectTransform _rootRectTransform;
-        [SerializeField] private Image _fill;
+        public float CurrentFillProgress { get; protected set; }
 
-        public float CurrentFillProgress { get; private set; }
+        public abstract void Setup(Color color);
 
-        public virtual void Setup(Color color) => _fill.color = color;
-        
         public virtual void SetFill(float progress)
         {
-            CurrentFillProgress= progress;
-            _fill.fillAmount = progress;
+            CurrentFillProgress = progress;
         }
 
-        public void SetSize(float cellSize)
-        {
-            _rootRectTransform.sizeDelta = new Vector2(cellSize, cellSize);
-        }
+        public abstract void SetSize(float cellSize);
+
+        public abstract void SetScale(float scale);
     }
 }

@@ -49,8 +49,61 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Level.Thermometer.ThermometerView
   _blobPrefab: {fileID: 6888711647736349152, guid: f8adf3a345c16944aa687d281c87866d, type: 3}
-  _straightPrefab: {fileID: 7166502949757035025, guid: b9d2e04c8b3dfb4449629b698cae8ca8, type: 3}
-  _turnRightPrefab: {fileID: 7166502949757035025, guid: 1b77c184239ddaf49bd344014d431784, type: 3}
-  _turnLeftPrefab: {fileID: 7166502949757035025, guid: 0ed9135814301034182336bd9a9555ff, type: 3}
-  _endPrefab: {fileID: 7241833045641563646, guid: 99fb2918def61a349ac76bb3d788fbef, type: 3}
+  _straightPrefab: {fileID: 6698647435441566792, guid: b9d2e04c8b3dfb4449629b698cae8ca8, type: 3}
+  _turnRightPrefab: {fileID: 121672469520528958, guid: 1b77c184239ddaf49bd344014d431784, type: 3}
+  _turnLeftPrefab: {fileID: 121672469520528958, guid: c444b4e1ad2f9c14f8b98be7da4446bb, type: 3}
+  _endPrefab: {fileID: 8283876803856552355, guid: 99fb2918def61a349ac76bb3d788fbef, type: 3}
   _partFillTime: 0.1
+  _scaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: -0.5
+      outSlope: -0.5
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2
+      value: -0.1
+      inSlope: 0.015779892
+      outSlope: 0.015779892
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.2548077
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6
+      value: 0.05
+      inSlope: -0.0033000936
+      outSlope: -0.0033000936
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.17036963
+    - serializedVersion: 3
+      time: 0.85
+      value: -0.02
+      inSlope: -0.0022219752
+      outSlope: -0.0022219752
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.2793823
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0.0098665245
+      outSlope: 0.0098665245
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.32098895
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _scaleTime: 0.2
+  _scaleModifier: 0.5
