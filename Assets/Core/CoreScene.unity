@@ -314,6 +314,7 @@ MonoBehaviour:
   _cellPrefab: {fileID: 1161181374025551663, guid: 43d3253eecebd954eb8fa37f0f9418ba, type: 3}
   _rowConstraintPrefab: {fileID: 8133686824095440537, guid: e424f9ce20472be48be7558224c8b889, type: 3}
   _columnConstraintPrefab: {fileID: 8133686824095440537, guid: e424f9ce20472be48be7558224c8b889, type: 3}
+  _fieldSizeViewPrefab: {fileID: 6008738103786041961, guid: 847dbcd1c2d75bf4a9f96d7b96868711, type: 3}
   _rowConstraintsParent: {fileID: 1434771102}
   _columnConstraintsParent: {fileID: 546757074}
   _thermometerViewPrefab: {fileID: 7491277957833335085, guid: 9b4c3019c94887f4cb8a29c9b4ee146d, type: 3}

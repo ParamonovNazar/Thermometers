@@ -16,5 +16,10 @@ namespace Core.Level.Thermometer
         public abstract void SetSize(float cellSize);
 
         public abstract void SetScale(float scale);
+
+        public void SetActiveCross(bool active)
+        {
+            
+        }
     }
 }

@@ -12,6 +12,7 @@ namespace Core.Level
         [SerializeField] private CellView _cellPrefab;
         [SerializeField] private ConstraintView _rowConstraintPrefab;
         [SerializeField] private ConstraintView _columnConstraintPrefab;
+        [SerializeField] private FieldSizeView _fieldSizeViewPrefab;
         [SerializeField] private Transform _rowConstraintsParent;
         [SerializeField] private Transform _columnConstraintsParent;
         [SerializeField] private ThermometerView _thermometerViewPrefab;
@@ -74,11 +75,10 @@ namespace Core.Level
             ColumnConstraints = new ConstraintView[model.Width];
 
             // Create grid elements
-            // Top row: Empty, then Column Constraints
-            GameObject emptyCell = Instantiate(_cellPrefab, _gridLayout.transform).gameObject;
-            emptyCell.name = "Empty_TopLeft";
-            // emptyCell.GetComponent<Image>().enabled = false; // Hide it instead of deactivating
-            if (emptyCell.TryGetComponent<CellView>(out var cellViewComp)) cellViewComp.enabled = false;
+            // Top row: grid info, then Column Constraints
+            var fieldSizeView = Instantiate(_fieldSizeViewPrefab, _gridLayout.transform);
+            fieldSizeView.Setup(model.Width, model.Height);
+            
             for (int x = 0; x < model.Width; x++)
             {
                 var constraintView = Instantiate(_columnConstraintPrefab, _gridLayout.transform);
