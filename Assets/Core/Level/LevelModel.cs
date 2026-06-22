@@ -10,6 +10,8 @@ namespace Core.Level
         private readonly Dictionary<Vector2Int, ThermometerData> _cellToThermometer;
         
         public event System.Action<ThermometerData, int> OnThermometerFillChanged;
+        public event System.Action<ThermometerData, int> OnThermometerCrossChanged;
+        public event System.Action<Vector2Int, CellState> OnCellStateChanged;
         public event System.Action OnLevelSolved;
 
         public int Width => _config.Width;
@@ -183,6 +185,48 @@ namespace Core.Level
             OnThermometerFillChanged?.Invoke(thermometer, targetLength);
             
             CheckWin();
+        }
+
+        public void SetCellState(Vector2Int coord, CellState state)
+        {
+            if (IsOutOfBounds(coord)) return;
+            
+            _cellStates[coord.x, coord.y] = state;
+            OnCellStateChanged?.Invoke(coord, state);
+            
+            CheckWin();
+        }
+
+        public void SetThermometerCross(ThermometerData thermometer, int crossFromIndex)
+        {
+            // crossFromIndex: the index from which everything until the end is crossed
+            // if we are removing crosses, we might need a different approach or just set target cross range
+            
+            for (int i = crossFromIndex; i < thermometer.Cells.Count; i++)
+            {
+                var cell = thermometer.Cells[i];
+                if (_cellStates[cell.x, cell.y] != CellState.Filled)
+                {
+                    _cellStates[cell.x, cell.y] = CellState.CrossedOut;
+                }
+            }
+            
+            OnThermometerCrossChanged?.Invoke(thermometer, crossFromIndex);
+        }
+
+        public void ClearThermometerCross(ThermometerData thermometer, int clearToIndex)
+        {
+            // clearToIndex: the index up to which all crosses are removed (from the beginning)
+            for (int i = 0; i <= clearToIndex; i++)
+            {
+                var cell = thermometer.Cells[i];
+                if (_cellStates[cell.x, cell.y] == CellState.CrossedOut)
+                {
+                    _cellStates[cell.x, cell.y] = CellState.Empty;
+                }
+            }
+            
+            OnThermometerCrossChanged?.Invoke(thermometer, clearToIndex);
         }
 
         private void CheckWin()

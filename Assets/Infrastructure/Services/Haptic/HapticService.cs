@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Infrastructure.Services.Haptic
 {
-    public class HapticService : IHapticService
+    public class HapticService
     {
         private readonly PlayerDataManager _playerDataManager;
 
@@ -13,10 +13,14 @@ namespace Infrastructure.Services.Haptic
     private static bool initialized = false;
 #endif
 
+        private static HapticService _instance;
+        public static HapticService Instance => _instance;
+
         public HapticService(PlayerDataManager playerDataManager)
         {
             _playerDataManager = playerDataManager;
             Init();
+            _instance = this;
         }
 
         public void Play(HapticType type)
@@ -112,5 +116,11 @@ namespace Infrastructure.Services.Haptic
             Handheld.Vibrate();
 #endif
         }
+    }
+
+    public enum HapticType
+    {
+        Button = 1,
+        ThermometerInteraction = 2
     }
 }

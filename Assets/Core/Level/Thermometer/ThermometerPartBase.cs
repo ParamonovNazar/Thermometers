@@ -4,6 +4,8 @@ namespace Core.Level.Thermometer
 {
     public abstract class ThermometerPartBase : MonoBehaviour
     {
+        [SerializeField] private GameObject _cross;
+        
         public float CurrentFillProgress { get; protected set; }
 
         public abstract void Setup(Color color);
@@ -19,7 +21,7 @@ namespace Core.Level.Thermometer
 
         public void SetActiveCross(bool active)
         {
-            
+            _cross.SetActive(active);
         }
     }
 }
