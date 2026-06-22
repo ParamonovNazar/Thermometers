@@ -8,13 +8,11 @@ namespace Core.Level.Input
     {
         private readonly RectTransform _rectTransform;
         private readonly LevelModel _levelModel;
-        private readonly HapticService _hapticService;
 
-        public InteractionHelper(RectTransform rectTransform, LevelModel levelModel, HapticService hapticService)
+        public InteractionHelper(RectTransform rectTransform, LevelModel levelModel)
         {
             _rectTransform = rectTransform;
             _levelModel = levelModel;
-            _hapticService = hapticService;
         }
 
         public bool TryFindCell(PointerEventData eventData, out Vector2Int cellPosition)
@@ -65,7 +63,7 @@ namespace Core.Level.Input
 
             _levelModel.SetThermometerFill(thermometer, length);
             
-            _hapticService.Play(HapticType.ThermometerInteraction);
+            HapticService.Instance.Play(HapticType.ThermometerInteraction);
         }
 
         public void UpdateCross(Vector2Int cellPosition, DrawType drawType)
@@ -93,7 +91,7 @@ namespace Core.Level.Input
                 }
             }
             
-            _hapticService.Play(HapticType.ThermometerInteraction);
+            HapticService.Instance.Play(HapticType.ThermometerInteraction);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Core.Level
         private readonly LevelConfig _config;
         private readonly CellState[,] _cellStates;
         private readonly Dictionary<Vector2Int, ThermometerData> _cellToThermometer;
+        private readonly HashSet<ThermometerData> _blockedThermometers = new();
         
         public event System.Action<ThermometerData, int> OnThermometerFillChanged;
         public event System.Action<ThermometerData, int> OnThermometerCrossChanged;
@@ -33,6 +34,16 @@ namespace Core.Level
                     _cellToThermometer[cell] = thermometer;
                 }
             }
+        }
+
+        public bool IsBlocked(ThermometerData thermometer)
+        {
+            return _blockedThermometers.Contains(thermometer);
+        }
+
+        public void BlockThermometer(ThermometerData thermometer)
+        {
+            _blockedThermometers.Add(thermometer);
         }
 
         public CellState GetCellState(Vector2Int coord)
@@ -175,6 +186,8 @@ namespace Core.Level
 
         public void SetThermometerFill(ThermometerData thermometer, int targetLength)
         {
+            if (IsBlocked(thermometer)) return;
+
             for (int i = 0; i < thermometer.Cells.Count; i++)
             {
                 var cell = thermometer.Cells[i];
@@ -199,9 +212,9 @@ namespace Core.Level
 
         public void SetThermometerCross(ThermometerData thermometer, int crossFromIndex)
         {
+            if (IsBlocked(thermometer)) return;
+
             // crossFromIndex: the index from which everything until the end is crossed
-            // if we are removing crosses, we might need a different approach or just set target cross range
-            
             for (int i = crossFromIndex; i < thermometer.Cells.Count; i++)
             {
                 var cell = thermometer.Cells[i];
@@ -216,6 +229,8 @@ namespace Core.Level
 
         public void ClearThermometerCross(ThermometerData thermometer, int clearToIndex)
         {
+            if (IsBlocked(thermometer)) return;
+
             // clearToIndex: the index up to which all crosses are removed (from the beginning)
             for (int i = 0; i <= clearToIndex; i++)
             {

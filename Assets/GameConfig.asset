@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: Assembly-CSharp::Infrastructure.Configs.GameConfig
   <Levels>k__BackingField:
-  - <LevelIndex>k__BackingField: 0
-    <LevelConfig>k__BackingField: {fileID: 11400000, guid: c22d23100eb05ed44a6657aa2e9cd039, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 6aa6aaad46e93714daf91208b999df3b, type: 2}
   <LoopedLevels>k__BackingField: []

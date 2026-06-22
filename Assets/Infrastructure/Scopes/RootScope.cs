@@ -18,7 +18,6 @@ namespace Infrastructure.Scopes
         {
             builder.Register<PlayerDataManager>(Lifetime.Singleton);
             builder.Register<LevelService>(Lifetime.Singleton);
-            builder.Register<HapticService>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register(resolver => resolver.Resolve<LevelService>().CurrentLevelModel, Lifetime.Singleton).AsSelf();
             builder.RegisterInstance(_levelStorage);
             builder.RegisterInstance(_gameConfig);

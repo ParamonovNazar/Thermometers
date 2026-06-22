@@ -14,6 +14,7 @@ namespace Core.Level.Thermometer
         [SerializeField] private RectTransform _firstStraightRect;
         [SerializeField] private RectTransform _secondStraightRect;
         [SerializeField] private RectTransform _turnRect;
+        [SerializeField] private List<Image> _borders;
 
         [SerializeField] private List<Segment> _segments;
 
@@ -61,6 +62,17 @@ namespace Core.Level.Thermometer
             
             _firstStraightRect.localScale = new Vector3(scale, straightScale, 1f);
             _secondStraightRect.localScale = new Vector3(straightScale, scale, 1f);
+        }
+
+        public override void SetBorderColor(Color color)
+        {
+            foreach (var border in _borders)
+            {
+                if (border != null)
+                {
+                    border.color = color;
+                }
+            }
         }
 
         public float _testProgress = 0.5f;

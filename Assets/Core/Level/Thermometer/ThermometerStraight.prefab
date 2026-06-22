@@ -161,9 +161,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 020cea9868024ca4849f7b3e2dd542d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Level.Thermometer.ThermometerPart
+  _cross: {fileID: 0}
   _rootRectTransform: {fileID: 4142092170305872078}
   _scaleRoot: {fileID: 6911906990109265840}
   _fill: {fileID: 2179457870266443487}
+  _border: {fileID: 5278649268160746256}
   _scaleWidth: 1
   _scaleHeight: 0
 --- !u!1 &7946079312745426014

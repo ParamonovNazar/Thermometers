@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53b53b3f754943a9bd6c2ed89ba26f74, type: 3}
+  m_Name: NewLevel
+  m_EditorClassIdentifier: Assembly-CSharp::Core.Level.LevelConfig
+  <Id>k__BackingField: NewLevel
+  <Width>k__BackingField: 5
+  <Height>k__BackingField: 5
+  <RowConstraints>k__BackingField: 0400000002000000040000000300000005000000
+  <ColumnConstraints>k__BackingField: 0500000005000000040000000300000001000000
+  <Thermometers>k__BackingField:
+  - _cells:
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    - {x: 2, y: 0}
+    - {x: 3, y: 0}
+    - {x: 4, y: 0}
+    _color: {r: 1, g: 1, b: 1, a: 1}
+    _solutionFill: 4
+  - _cells:
+    - {x: 0, y: 1}
+    - {x: 1, y: 1}
+    - {x: 2, y: 1}
+    - {x: 3, y: 1}
+    - {x: 4, y: 1}
+    _color: {r: 0.33072045, g: 0.06389154, b: 0.7499754, a: 1}
+    _solutionFill: 2
+  - _cells:
+    - {x: 0, y: 2}
+    - {x: 1, y: 2}
+    - {x: 2, y: 2}
+    - {x: 3, y: 2}
+    - {x: 4, y: 2}
+    _color: {r: 0.08655215, g: 0.7381447, b: 0.25203493, a: 1}
+    _solutionFill: 4
+  - _cells:
+    - {x: 0, y: 3}
+    - {x: 1, y: 3}
+    - {x: 2, y: 3}
+    - {x: 3, y: 3}
+    - {x: 4, y: 3}
+    _color: {r: 0.18882445, g: 0.5367972, b: 0.80378544, a: 1}
+    _solutionFill: 3
+  - _cells:
+    - {x: 0, y: 4}
+    - {x: 1, y: 4}
+    - {x: 2, y: 4}
+    - {x: 3, y: 4}
+    - {x: 4, y: 4}
+    _color: {r: 0.50340277, g: 0.5605437, b: 0.9636276, a: 1}
+    _solutionFill: 5

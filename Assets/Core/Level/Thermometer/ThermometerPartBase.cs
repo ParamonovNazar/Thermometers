@@ -19,6 +19,8 @@ namespace Core.Level.Thermometer
 
         public abstract void SetScale(float scale);
 
+        public abstract void SetBorderColor(Color color);
+
         public void SetActiveCross(bool active)
         {
             _cross.SetActive(active);

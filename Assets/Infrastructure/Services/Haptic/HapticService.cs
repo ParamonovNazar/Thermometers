@@ -16,11 +16,16 @@ namespace Infrastructure.Services.Haptic
         private static HapticService _instance;
         public static HapticService Instance => _instance;
 
-        public HapticService(PlayerDataManager playerDataManager)
+        
+        public static void Initialize(PlayerDataManager playerDataManager)
+        {
+            _instance = new HapticService(playerDataManager);
+        }
+        
+        private HapticService(PlayerDataManager playerDataManager)
         {
             _playerDataManager = playerDataManager;
             Init();
-            _instance = this;
         }
 
         public void Play(HapticType type)

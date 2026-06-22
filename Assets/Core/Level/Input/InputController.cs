@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Core.Level.Thermometer;
+using Cysharp.Threading.Tasks;
 using Infrastructure.Services.Haptic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,9 +16,10 @@ namespace Core.Level.Input
         [SerializeField] private LevelView _levelView;
         [SerializeField] private RectTransform _rectTransform;
 
+        [SerializeField] private Color _hintColor = Color.yellow;
+
         private LevelModel _levelModel;
         private ThermometerData _currentThermometer;
-        private HapticService _hapticService;
 
         [field: SerializeField] public FillType FillType { get; set; } = FillType.Fill;
         [field: SerializeField] public DrawType DrawType { get; set; } = DrawType.Add;
@@ -25,16 +30,11 @@ namespace Core.Level.Input
         private LifetimeScope _scope;
         private InteractionHelper _interactionHelper;
 
-        [Inject]
-        public void Constructor(HapticService hapticService)
-        {
-            _hapticService = hapticService;
-        }
 
         public void Initialize(LevelModel levelModel)
         {
             _levelModel = levelModel;
-            _interactionHelper = new InteractionHelper(_rectTransform, _levelModel, _hapticService);
+            _interactionHelper = new InteractionHelper(_rectTransform, _levelModel);
             _fillState = new FillState(_levelModel, _interactionHelper);
             _crossState = new CrossState(_levelModel, _interactionHelper);
             ChangeState(FillType);
@@ -72,6 +72,28 @@ namespace Core.Level.Input
         public void OnPointerMove(PointerEventData eventData)
         {
             _currentInputState.OnPointerMove(eventData);
+        }
+
+        public void Hint()
+        {
+            var incorrectThermometers = _levelModel.Thermometers
+                .Where(t => _levelModel.GetThermometerFill(t) != t.SolutionFill)
+                .ToList();
+
+            if (incorrectThermometers.Count == 0) return;
+
+            var randomThermometer = incorrectThermometers[UnityEngine.Random.Range(0, incorrectThermometers.Count)];
+
+            _levelModel.SetThermometerFill(randomThermometer, randomThermometer.SolutionFill);
+            _levelModel.BlockThermometer(randomThermometer);
+
+            ThermometerView view = _levelView.GetThermometerView(randomThermometer);
+            if (view != null)
+            {
+                view.IsBlocked = true;
+                // view.Fill is called by HandleThermometerFillChanged in LevelView
+                view.Highlight(_hintColor, 0.5f).Forget();
+            }
         }
     }
 

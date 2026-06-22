@@ -107,3 +107,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   _scaleTime: 0.2
   _scaleModifier: 0.5
+  _defaultBorderColor: {r: 0.8232467, g: 0.85061634, b: 0.9433962, a: 1}

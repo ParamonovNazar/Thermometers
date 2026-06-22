@@ -17,15 +17,18 @@ namespace Core.Level.Thermometer
         [SerializeField] private AnimationCurve _scaleCurve;
         [SerializeField] private float _scaleTime = 0.2f;
         [SerializeField] private float _scaleModifier = 1.1f;
+        [SerializeField] private Color _defaultBorderColor = Color.white;
 
         private List<ThermometerPartBase> _parts = new();
         private List<Vector2Int> _cellCoords = new();
 
         public int Length { get; private set; }
         public int CurrentFillIndex { get; private set; }
+        public bool IsBlocked { get; set; } = false;
 
         private CancellationTokenSource _fillCancellationTokenSource;
         private CancellationTokenSource _scaleCancellationTokenSource;
+        private CancellationTokenSource _highlightCancellationTokenSource;
 
         public void Initialize(ThermometerData data, float cellSize)
         {
@@ -71,15 +74,53 @@ namespace Core.Level.Thermometer
                     }
                     else
                     {
-                        part.transform.localRotation = GetRotationForTurn(prevDir, nextDir);
+                        part.transform.localRotation = GetRotationForDirection(prevDir);
                     }
                 }
 
                 part.SetSize(cellSize);
                 part.Setup(data.Color);
+                part.SetBorderColor(_defaultBorderColor);
                 part.SetFill(0);
                 part.SetScale(1f);
                 _parts.Add(part);
+            }
+        }
+
+        public async UniTask Highlight(Color highlightColor, float duration)
+        {
+            _highlightCancellationTokenSource?.Cancel();
+            _highlightCancellationTokenSource?.Dispose();
+            _highlightCancellationTokenSource = new CancellationTokenSource();
+            var token = _highlightCancellationTokenSource.Token;
+
+            try
+            {
+                float elapsed = 0f;
+
+                // To highlight color
+                while (elapsed < duration)
+                {
+                    elapsed += Time.deltaTime;
+                    float progress = Mathf.Clamp01(elapsed / duration);
+                    Color currentColor = Color.Lerp(_defaultBorderColor, highlightColor, progress);
+                    SetBordersColor(currentColor);
+                    await UniTask.Yield(PlayerLoopTiming.Update, token);
+                }
+
+                SetBordersColor(highlightColor);
+            }
+            catch (System.OperationCanceledException)
+            {
+                // Highlight cancelled
+            }
+        }
+
+        private void SetBordersColor(Color color)
+        {
+            foreach (var part in _parts)
+            {
+                part.SetBorderColor(color);
             }
         }
 
@@ -103,26 +144,9 @@ namespace Core.Level.Thermometer
             return crossProduct < 0 ? _turnRightPrefab : _turnLeftPrefab;
         }
 
-        private Quaternion GetRotationForTurn(Vector2Int prevDir, Vector2Int nextDir)
-        {
-            // Base rotation: Up -> Right/Left
-            if (prevDir == Vector2Int.up) return Quaternion.identity;
-
-            // Right -> Down/Up
-            if (prevDir == Vector2Int.right) return Quaternion.Euler(0, 0, -90);
-
-            // Down -> Left/Right
-            if (prevDir == Vector2Int.down) return Quaternion.Euler(0, 0, 180);
-
-            // Left -> Up/Down
-            if (prevDir == Vector2Int.left) return Quaternion.Euler(0, 0, 90);
-
-            return Quaternion.identity;
-        }
-
         private Quaternion GetRotationForDirection(Vector2Int direction)
         {
-            if (direction == Vector2Int.up) return Quaternion.Euler(0, 0, 0);
+            if (direction == Vector2Int.up) return Quaternion.identity;
             if (direction == Vector2Int.down) return Quaternion.Euler(0, 0, 180);
             if (direction == Vector2Int.left) return Quaternion.Euler(0, 0, 90);
             if (direction == Vector2Int.right) return Quaternion.Euler(0, 0, -90);

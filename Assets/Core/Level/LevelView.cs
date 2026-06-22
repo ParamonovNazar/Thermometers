@@ -28,6 +28,11 @@ namespace Core.Level
         public ConstraintView[] RowConstraints { get; private set; }
         public ConstraintView[] ColumnConstraints { get; private set; }
         public List<ThermometerView> Thermometers { get; private set; } = new();
+        
+        public ThermometerView GetThermometerView(ThermometerData data)
+        {
+            return _thermometerViews.TryGetValue(data, out var view) ? view : null;
+        }
 
         public void Initialize(LevelModel model)
         {
@@ -125,6 +130,7 @@ namespace Core.Level
                 _thermometerViews[thermometerData] = thermometerView;
             }
         }
+        
 
         private void OnDestroy()
         {

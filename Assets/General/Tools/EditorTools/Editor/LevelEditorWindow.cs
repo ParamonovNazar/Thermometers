@@ -77,7 +77,7 @@ namespace Tools.EditorTools.Editor
                 {
                     _selectedThermometerIndex = i;
                 }
-                _thermometers[i] = new ThermometerData(_thermometers[i].Cells, EditorGUILayout.ColorField(_thermometers[i].Color));
+                _thermometers[i].Color = EditorGUILayout.ColorField(_thermometers[i].Color);
                 if (GUILayout.Button("X", GUILayout.Width(20)))
                 {
                     _thermometers.RemoveAt(i);
@@ -241,22 +241,28 @@ namespace Tools.EditorTools.Editor
             }
 
             var levelConfig = ScriptableObject.CreateInstance<LevelConfig>();
-            SerializedObject so = new SerializedObject(levelConfig);
-            so.FindProperty("<Id>k__BackingField").stringValue = _levelId;
-            so.FindProperty("<Width>k__BackingField").intValue = _width;
-            so.FindProperty("<Height>k__BackingField").intValue = _height;
+            levelConfig.Id = _levelId;
+            levelConfig.Width = _width;
+            levelConfig.Height = _height;
+            levelConfig.RowConstraints = rowConstraints;
+            levelConfig.ColumnConstraints = colConstraints;
 
-            var rowsProp = so.FindProperty("<RowConstraints>k__BackingField");
-            rowsProp.arraySize = _height;
-            for (int i = 0; i < _height; i++) rowsProp.GetArrayElementAtIndex(i).intValue = rowConstraints[i];
+            List<ThermometerData> savedThermometers = new List<ThermometerData>();
+            foreach (var thermometer in _thermometers)
+            {
+                int fill = 0;
+                foreach (var cell in thermometer.Cells)
+                {
+                    if (_solution.Contains(cell)) fill++;
+                    else break;
+                }
 
-            var colsProp = so.FindProperty("<ColumnConstraints>k__BackingField");
-            colsProp.arraySize = _width;
-            for (int i = 0; i < _width; i++) colsProp.GetArrayElementAtIndex(i).intValue = colConstraints[i];
-
-            so.ApplyModifiedProperties();
-
-            typeof(LevelConfig).GetProperty("Thermometers").SetValue(levelConfig, _thermometers);
+                // Create a new instance to ensure it's properly serialized in the asset
+                var data = new ThermometerData(new List<Vector2Int>(thermometer.Cells), thermometer.Color);
+                data.SolutionFill = fill;
+                savedThermometers.Add(data);
+            }
+            levelConfig.Thermometers = savedThermometers;
 
             // Add to LevelStorage
             var guids = AssetDatabase.FindAssets("t:LevelStorage");
