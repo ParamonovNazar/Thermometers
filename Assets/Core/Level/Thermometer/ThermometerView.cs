@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -272,6 +273,16 @@ namespace Core.Level.Thermometer
             catch (System.OperationCanceledException)
             {
             }
+        }
+
+        private void OnDestroy()
+        {
+            _scaleCancellationTokenSource?.Cancel();
+            _scaleCancellationTokenSource?.Dispose();
+            _fillCancellationTokenSource?.Cancel();
+            _fillCancellationTokenSource?.Dispose();
+            _highlightCancellationTokenSource?.Cancel();
+            _highlightCancellationTokenSource?.Dispose();
         }
     }
 }

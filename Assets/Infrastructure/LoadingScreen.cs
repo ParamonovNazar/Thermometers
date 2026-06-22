@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Infrastructure.General.Fill;
@@ -9,17 +8,8 @@ namespace Infrastructure
     public class LoadingScreen : MonoBehaviour
     {
         [SerializeField] private SmoothFillBase _smoothFill;
-        [SerializeField] private float _hideTime;
 
         private CancellationTokenSource _cancellationTokenSource;
-        public bool IsActive { get; set; } = true;
-        public static LoadingScreen Instance { get; private set; }
-
-        private void Awake()
-        {
-            DontDestroyOnLoad(this.gameObject);
-            Instance = this;
-        }
 
         public void SetProgress(float progress)
         {
@@ -36,14 +26,9 @@ namespace Infrastructure
 
         public async UniTask Complete()
         {
-            IsActive = false;
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
             await _smoothFill.FillTo(1f, _cancellationTokenSource.Token).SuppressCancellationThrow();
-            // _animator.SetTrigger("Hide");
-            await UniTask.Delay(TimeSpan.FromSeconds(_hideTime), cancellationToken: _cancellationTokenSource.Token)
-                .SuppressCancellationThrow();
-            gameObject.SetActive(false);
         }
     }
 }

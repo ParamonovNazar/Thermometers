@@ -1,6 +1,7 @@
 using Core.Level;
 using Cysharp.Threading.Tasks;
 using Infrastructure.Configs;
+using Infrastructure.TransitionScreen;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer.Unity;
@@ -37,14 +38,9 @@ namespace Infrastructure.StateMachine.Game
             CurrentLevelConfig = _levelService.GetCurrentLevelConfig();
             LoadLevel(CurrentLevelConfig);
 
-            if (LoadingScreen.Instance.IsActive)
+            if (TransitionView.Instance.IsActive)
             {
-                await LoadingScreen.Instance.Complete();
-            }
-
-            if (TransitionScreen.Instance.IsActive)
-            {
-                await TransitionScreen.Instance.Hide();
+                await TransitionView.Instance.Hide();
             }
 
             IsActive = true;
@@ -71,7 +67,12 @@ namespace Infrastructure.StateMachine.Game
             }
             
             _levelService.CompleteLevel();
-            TransitionScreen.Instance.Show().Forget(Debug.LogException);
+            TransitToEnd().Forget(Debug.LogException);
+        }
+
+        private async UniTask TransitToEnd()
+        {
+            await TransitionView.Instance.Show();
             _gameStateMachine.Enter<GameCoreEndState>();
         }
 

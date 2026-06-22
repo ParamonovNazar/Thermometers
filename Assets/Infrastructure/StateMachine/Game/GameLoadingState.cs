@@ -1,21 +1,21 @@
 using Cysharp.Threading.Tasks;
-using Infrastructure.Configs;
 using Infrastructure.Player;
+using Meta;
 using UnityEngine;
 
 namespace Infrastructure.StateMachine.Game
 {
     public class GameLoadingState : IGameState
     {
-        private const float LOAD_PROGRESS_VALUE = 0.8f;
-
         private readonly GameStateMachine _gameStateMachine;
         private readonly PlayerDataManager _playerDataManager;
-        
-        public GameLoadingState(GameStateMachine gameStateMachine, PlayerDataManager playerDataManager)
+        private readonly GameMetaState _gameMetaState;
+
+        public GameLoadingState(GameStateMachine gameStateMachine, PlayerDataManager playerDataManager, GameMetaState gameMetaState)
         {
             _gameStateMachine = gameStateMachine;
             _playerDataManager = playerDataManager;
+            _gameMetaState = gameMetaState;
         }
 
         public void Enter()
@@ -25,22 +25,16 @@ namespace Infrastructure.StateMachine.Game
 
         private async UniTask LoadAndStart()
         {
+            _gameMetaState.ShouldAppear = true;
+            var metaHud = Object.FindFirstObjectByType<MetaHud>();
+            metaHud.StartLoading();
+            
             _playerDataManager.LoadData();
-
-            await InitializeServices();
-            // await _environmentLoader.LoadLocation();
-            _gameStateMachine.Enter<GameCoreState>();
+            //initialize services, load data
+            
+            _gameStateMachine.Enter<GameMetaState>();
         }
-
-        private async UniTask InitializeServices()
-        {
-        }
-
-        private void UpdateLoadingWindow(float configLoadingProgress)
-        {
-            LoadingScreen.Instance.UpdateProgress(configLoadingProgress * LOAD_PROGRESS_VALUE);
-        }
-
+        
         public void Exit()
         {
         }

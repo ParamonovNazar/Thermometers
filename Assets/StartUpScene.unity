@@ -127,6 +127,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3879567630653442502, guid: b6e827c9aee39da4d85caf8d21fa2879, type: 3}
+      propertyPath: m_text
+      value: Thermometers
+      objectReference: {fileID: 0}
+    - target: {fileID: 3879567630653442502, guid: b6e827c9aee39da4d85caf8d21fa2879, type: 3}
+      propertyPath: m_fontSize
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3879567630653442502, guid: b6e827c9aee39da4d85caf8d21fa2879, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 4d5dc02e0fe3d8e4098f155df678e718, type: 2}
+    - target: {fileID: 3879567630653442502, guid: b6e827c9aee39da4d85caf8d21fa2879, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3879567630653442502, guid: b6e827c9aee39da4d85caf8d21fa2879, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3879567630653442502, guid: b6e827c9aee39da4d85caf8d21fa2879, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 965d0d320f3f91f42932ee9d447f0db5, type: 2}
+    - target: {fileID: 3879567630653442502, guid: b6e827c9aee39da4d85caf8d21fa2879, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4368125028264880030, guid: b6e827c9aee39da4d85caf8d21fa2879, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -211,6 +239,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: LoadingScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 8491121612161968818, guid: b6e827c9aee39da4d85caf8d21fa2879, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8491121612161968818, guid: b6e827c9aee39da4d85caf8d21fa2879, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8491121612161968818, guid: b6e827c9aee39da4d85caf8d21fa2879, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 8491121612161968818, guid: b6e827c9aee39da4d85caf8d21fa2879, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -642
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -230,7 +274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2836824568407017003, guid: 4157d3daaf7820d4dab5eb98d0d45f0f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5577917787159701731, guid: 4157d3daaf7820d4dab5eb98d0d45f0f, type: 3}
       propertyPath: m_margin.w

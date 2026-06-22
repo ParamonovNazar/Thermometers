@@ -65,7 +65,7 @@ namespace Tools.EditorTools.Editor
         [MenuItem("Play/PlayFromStart", false, 1)]
         public static void Play()
         {
-            EditorSceneManager.OpenScene($"Assets/{GameStartState.START_SCENE}.unity");
+            EditorSceneManager.OpenScene($"Assets/Meta/{GameStartState.START_SCENE}.unity");
             EditorApplication.EnterPlaymode();
         }
 

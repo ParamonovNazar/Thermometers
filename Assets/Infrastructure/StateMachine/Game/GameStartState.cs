@@ -5,7 +5,7 @@ namespace Infrastructure.StateMachine.Game
 {
     public class GameStartState : IGameState
     {
-        public const string START_SCENE = "StartUpScene";
+        public const string START_SCENE = "MetaScene";
         private readonly GameStateMachine _gameStateMachine;
 
         public GameStartState(GameStateMachine gameStateMachine)
@@ -15,7 +15,6 @@ namespace Infrastructure.StateMachine.Game
 
         public void Enter()
         {
-            LoadingScreen.Instance.SetProgress(0f);
             InitializeAnalytics().Forget(Debug.LogException);
         }
 
@@ -26,9 +25,9 @@ namespace Infrastructure.StateMachine.Game
             _gameStateMachine.Enter<GameLoadingState>();
         }
 
-        private async UniTask RunGDPR()
+        private UniTask RunGDPR()
         {
-           return;
+            return UniTask.CompletedTask;
         }
 
         private void StartAnalytics()
