@@ -8,25 +8,31 @@ namespace Core.Level
     public class ThermometerData
     {
         [SerializeField] private List<Vector2Int> _cells = new List<Vector2Int>();
-        [SerializeField] private Color _color = Color.white;
+        [SerializeField] private int _colorId;
         [SerializeField] private int _solutionFill;
 
         public List<Vector2Int> Cells => _cells;
-        public Color Color
+        public int ColorId
         {
-            get => _color;
-            set => _color = value;
+            get => _colorId;
+            set => _colorId = value;
         }
+        
         public int SolutionFill
         {
             get => _solutionFill;
             set => _solutionFill = value;
         }
 
-        public ThermometerData(List<Vector2Int> cells, Color color)
+        public ThermometerData(List<Vector2Int> cells, int colorId)
         {
             _cells = cells;
-            _color = color;
+            _colorId = colorId;
+        }
+
+        public ThermometerData(List<Vector2Int> cells)
+        {
+            _cells = cells;
         }
 
         public ThermometerData()

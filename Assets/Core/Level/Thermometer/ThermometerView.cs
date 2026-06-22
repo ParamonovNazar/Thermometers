@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Infrastructure.Configs;
 using UnityEngine;
 
 namespace Core.Level.Thermometer
@@ -20,6 +21,7 @@ namespace Core.Level.Thermometer
         [SerializeField] private float _scaleModifier = 1.1f;
         [SerializeField] private Color _defaultBorderColor = Color.white;
 
+        private GameConfig _gameConfig;
         private List<ThermometerPartBase> _parts = new();
         private List<Vector2Int> _cellCoords = new();
         private ThermometerData _data;
@@ -32,9 +34,26 @@ namespace Core.Level.Thermometer
         private CancellationTokenSource _scaleCancellationTokenSource;
         private CancellationTokenSource _highlightCancellationTokenSource;
 
-        public void Initialize(ThermometerData data, float cellSize)
+        public void Initialize(ThermometerData data, float cellSize, GameConfig gameConfig)
         {
             _data = data;
+            _gameConfig = gameConfig;
+
+            Color thermometerColor = Color.white;
+            if (_gameConfig != null && _gameConfig.ColorPalette != null)
+            {
+                var idColor = _gameConfig.ColorPalette.Find(c => c.Id == data.ColorId);
+                if (idColor != null)
+                {
+                    thermometerColor = idColor.Color;
+                }
+                else
+                {
+                    Debug.LogWarning($"Color with id {data.ColorId} not found in the color palette. Using default color.");
+                    thermometerColor =_gameConfig.FallbackThermometerColor;
+                }
+            }
+
             _cellCoords = new List<Vector2Int>(data.Cells);
             Length = data.Cells.Count;
             CurrentFillIndex = 0;
@@ -82,7 +101,7 @@ namespace Core.Level.Thermometer
                 }
 
                 part.SetSize(cellSize);
-                part.Setup(data.Color);
+                part.Setup(thermometerColor);
                 part.SetBorderColor(_defaultBorderColor);
                 part.SetFill(0);
                 part.SetScale(1f);

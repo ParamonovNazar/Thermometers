@@ -16,3 +16,23 @@ MonoBehaviour:
   - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 6aa6aaad46e93714daf91208b999df3b, type: 2}
   <LoopedLevels>k__BackingField:
   - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 6aa6aaad46e93714daf91208b999df3b, type: 2}
+  <ColorPalette>k__BackingField:
+  - <Id>k__BackingField: 0
+    <Color>k__BackingField: {r: 0.49019608, g: 0.5254902, b: 0.6392157, a: 1}
+  - <Id>k__BackingField: 1
+    <Color>k__BackingField: {r: 0.84313726, g: 0.53333336, b: 0.5529412, a: 1}
+  - <Id>k__BackingField: 2
+    <Color>k__BackingField: {r: 0.6784314, g: 0.78039217, b: 0.6666667, a: 1}
+  - <Id>k__BackingField: 3
+    <Color>k__BackingField: {r: 0.8392157, g: 0.78431374, b: 0.49803922, a: 1}
+  - <Id>k__BackingField: 4
+    <Color>k__BackingField: {r: 0.5058824, g: 0.70980394, b: 0.6627451, a: 1}
+  - <Id>k__BackingField: 5
+    <Color>k__BackingField: {r: 0.65882355, g: 0.6039216, b: 0.5686275, a: 1}
+  - <Id>k__BackingField: 6
+    <Color>k__BackingField: {r: 0.7411765, g: 0.70980394, b: 0.8627451, a: 1}
+  - <Id>k__BackingField: 7
+    <Color>k__BackingField: {r: 0.5529412, g: 0.6627451, b: 0.81960785, a: 1}
+  - <Id>k__BackingField: 8
+    <Color>k__BackingField: {r: 0.7254902, g: 0.52156866, b: 0.67058825, a: 1}
+  <FallbackThermometerColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}

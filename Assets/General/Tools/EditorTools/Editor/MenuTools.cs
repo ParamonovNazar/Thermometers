@@ -23,11 +23,11 @@ namespace Tools.EditorTools.Editor
             var thermometers = new List<ThermometerData>
             {
                 new ThermometerData(new List<Vector2Int>
-                    { new Vector2Int(0, 0), new Vector2Int(0, 1), new Vector2Int(0, 2) }, Color.green),
+                    { new Vector2Int(0, 0), new Vector2Int(0, 1), new Vector2Int(0, 2) }),
                 new ThermometerData(new List<Vector2Int>
-                    { new Vector2Int(1, 0), new Vector2Int(1, 1), new Vector2Int(1, 2) }, Color.green),
+                    { new Vector2Int(1, 0), new Vector2Int(1, 1), new Vector2Int(1, 2) }),
                 new ThermometerData(new List<Vector2Int>
-                    { new Vector2Int(2, 0), new Vector2Int(2, 1), new Vector2Int(2, 2) }, Color.green)
+                    { new Vector2Int(2, 0), new Vector2Int(2, 1), new Vector2Int(2, 2) })
             };
 
             // Use reflection or change LevelConfig to allow setting fields for this tool if they are private

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Level;
+using Infrastructure.Configs;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,22 +9,44 @@ namespace Tools.EditorTools.Editor
 {
     public class LevelEditorWindow : EditorWindow
     {
-        private string _levelId = "NewLevel";
+        private string _levelId = "Level";
         private int _width = 5;
         private int _height = 5;
         private List<ThermometerData> _thermometers = new List<ThermometerData>();
         private HashSet<Vector2Int> _solution = new HashSet<Vector2Int>();
         
         private int _selectedThermometerIndex = -1;
-        private Color _nextColor = Color.white;
+        private int _selectedColorId = -1;
         
         private Vector2 _scrollPosition;
         private const float CELL_SIZE = 30f;
+        private GameConfig _gameConfig;
+        private LevelConfig _configToLoad;
+        private LevelConfig _activeConfig;
 
         [MenuItem("Tools/Levels/Level Editor")]
         public static void ShowWindow()
         {
             GetWindow<LevelEditorWindow>("Level Editor");
+        }
+
+        private void OnEnable()
+        {
+            LoadConfig();
+        }
+
+        private void LoadConfig()
+        {
+            var guids = AssetDatabase.FindAssets("t:GameConfig");
+            if (guids.Length > 0)
+            {
+                var storagePath = AssetDatabase.GUIDToAssetPath(guids[0]);
+                _gameConfig= AssetDatabase.LoadAssetAtPath<GameConfig>(storagePath);
+            }
+            else
+            {
+                Debug.LogError("GameConfig not found");
+            }
         }
 
         private void OnGUI()
@@ -35,6 +58,8 @@ namespace Tools.EditorTools.Editor
             DrawControls();
             EditorGUILayout.EndVertical();
 
+            GUILayout.Space(20);
+
             // Right Panel: Grid
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
             DrawGrid();
@@ -45,11 +70,29 @@ namespace Tools.EditorTools.Editor
 
         private void DrawControls()
         {
+            if (_gameConfig == null)
+            {
+                EditorGUILayout.HelpBox("GameConfig not found at Assets/GameConfig.asset", MessageType.Error);
+                if (GUILayout.Button("Reload Config")) LoadConfig();
+                return;
+            }
+
             GUILayout.Label("Level Settings", EditorStyles.boldLabel);
             _levelId = EditorGUILayout.TextField("Level ID", _levelId);
             _width = EditorGUILayout.IntField("Width", _width);
             _height = EditorGUILayout.IntField("Height", _height);
 
+            GUILayout.Space(5);
+            _configToLoad = (LevelConfig)EditorGUILayout.ObjectField("Config to Load", _configToLoad, typeof(LevelConfig), false);
+            if (GUILayout.Button("Load Selected Config"))
+            {
+                if (_configToLoad != null)
+                {
+                    LoadLevelFromConfig(_configToLoad);
+                }
+            }
+
+            GUILayout.Space(5);
             if (GUILayout.Button("Clear Grid"))
             {
                 if (EditorUtility.DisplayDialog("Clear Grid", "Are you sure you want to clear all thermometers and solution?", "Yes", "No"))
@@ -57,6 +100,7 @@ namespace Tools.EditorTools.Editor
                     _thermometers.Clear();
                     _solution.Clear();
                     _selectedThermometerIndex = -1;
+                    _activeConfig = null;
                 }
             }
 
@@ -65,9 +109,18 @@ namespace Tools.EditorTools.Editor
             
             if (GUILayout.Button("Add Thermometer"))
             {
-                _thermometers.Add(new ThermometerData(new List<Vector2Int>(), _nextColor));
+                Color color = Color.white;
+                int colorId = -1;
+                if (_gameConfig.ColorPalette != null && _gameConfig.ColorPalette.Count > 0)
+                {
+                    int randomIndex = Random.Range(0, _gameConfig.ColorPalette.Count);
+                    var entry = _gameConfig.ColorPalette[randomIndex];
+                    color = entry.Color;
+                    colorId = entry.Id;
+                }
+                
+                _thermometers.Add(new ThermometerData(new List<Vector2Int>(), colorId));
                 _selectedThermometerIndex = _thermometers.Count - 1;
-                _nextColor = new Color(Random.value, Random.value, Random.value, 1f);
             }
 
             for (int i = 0; i < _thermometers.Count; i++)
@@ -77,7 +130,28 @@ namespace Tools.EditorTools.Editor
                 {
                     _selectedThermometerIndex = i;
                 }
-                _thermometers[i].Color = EditorGUILayout.ColorField(_thermometers[i].Color);
+
+                if (_gameConfig.ColorPalette != null && _gameConfig.ColorPalette.Count > 0)
+                {
+                    string[] colorNames = _gameConfig.ColorPalette.Select(c => $"Color {c.Id}").ToArray();
+                    int currentColorIndex = -1;
+                    // Try to find the color in the palette
+                    var matchedColor = _gameConfig.ColorPalette.FirstOrDefault(cp => cp.Id == _thermometers[i].ColorId);
+                    if (matchedColor != null) currentColorIndex = _gameConfig.ColorPalette.IndexOf(matchedColor);
+
+                    int newColorIndex = EditorGUILayout.Popup(currentColorIndex, colorNames, GUILayout.Width(80));
+                    if (newColorIndex != currentColorIndex && newColorIndex >= 0)
+                    {
+                        var entry = _gameConfig.ColorPalette[newColorIndex];
+                        _thermometers[i].ColorId = entry.Id;
+                    }
+                }
+                
+                using (new EditorGUI.DisabledGroupScope(true))
+                {
+                    EditorGUILayout.ColorField(_gameConfig.ColorPalette.FirstOrDefault(cp => cp.Id == _thermometers[i].ColorId)?.Color??Color.red);
+                }
+                
                 if (GUILayout.Button("X", GUILayout.Width(20)))
                 {
                     _thermometers.RemoveAt(i);
@@ -134,7 +208,8 @@ namespace Tools.EditorTools.Editor
             var thermo = _thermometers.FirstOrDefault(t => t.Cells.Contains(coord));
             if (thermo != null)
             {
-                Color c = thermo.Color;
+                Color c = _gameConfig.ColorPalette.FirstOrDefault(cp => cp.Id == thermo.ColorId)?.Color ??
+                          Color.red;
                 c.a = 0.5f;
                 EditorGUI.DrawRect(new Rect(rect.x + 2, rect.y + 2, rect.width - 4, rect.height - 4), c);
                 
@@ -240,7 +315,19 @@ namespace Tools.EditorTools.Editor
                 colConstraints[x] = count;
             }
 
-            var levelConfig = ScriptableObject.CreateInstance<LevelConfig>();
+            LevelConfig levelConfig;
+            bool isNew = false;
+
+            if (_activeConfig != null && _activeConfig.Id == _levelId)
+            {
+                levelConfig = _activeConfig;
+            }
+            else
+            {
+                levelConfig = ScriptableObject.CreateInstance<LevelConfig>();
+                isNew = true;
+            }
+
             levelConfig.Id = _levelId;
             levelConfig.Width = _width;
             levelConfig.Height = _height;
@@ -258,37 +345,56 @@ namespace Tools.EditorTools.Editor
                 }
 
                 // Create a new instance to ensure it's properly serialized in the asset
-                var data = new ThermometerData(new List<Vector2Int>(thermometer.Cells), thermometer.Color);
+                var data = new ThermometerData(new List<Vector2Int>(thermometer.Cells), thermometer.ColorId);
                 data.SolutionFill = fill;
                 savedThermometers.Add(data);
             }
             levelConfig.Thermometers = savedThermometers;
 
-            // Add to LevelStorage
-            var guids = AssetDatabase.FindAssets("t:LevelStorage");
-            if (guids.Length > 0)
+            if (isNew)
             {
-                var storagePath = AssetDatabase.GUIDToAssetPath(guids[0]);
-                var storage = AssetDatabase.LoadAssetAtPath<LevelStorage>(storagePath);
-                if (storage != null)
-                {
-                    if (storage.Levels == null) storage.Levels = new List<LevelConfig>();
-                    if (!storage.Levels.Contains(levelConfig))
-                    {
-                        storage.Levels.Add(levelConfig);
-                        EditorUtility.SetDirty(storage);
-                    }
-                }
+                string path = $"Assets/Core/Level/Configs/{_levelId}.asset";
+                AssetDatabase.CreateAsset(levelConfig, path);
+                _activeConfig = levelConfig;
+                Debug.Log($"Level saved to new asset: {path}");
+            }
+            else
+            {
+                EditorUtility.SetDirty(levelConfig);
+                Debug.Log($"Existing level asset '{levelConfig.name}' updated.");
             }
 
-            string path = $"Assets/Core/Level/{_levelId}.asset";
-            AssetDatabase.CreateAsset(levelConfig, path);
             AssetDatabase.SaveAssets();
             
             EditorUtility.FocusProjectWindow();
             Selection.activeObject = levelConfig;
-            
-            Debug.Log($"Level saved to {path}");
+        }
+
+        private void LoadLevelFromConfig(LevelConfig config)
+        {
+            _activeConfig = config;
+            _levelId = config.Id;
+            _width = config.Width;
+            _height = config.Height;
+            _thermometers.Clear();
+            _solution.Clear();
+
+            foreach (var thermometer in config.Thermometers)
+            {
+                var newThermo = new ThermometerData(new List<Vector2Int>(thermometer.Cells), thermometer.ColorId);
+                newThermo.SolutionFill = thermometer.SolutionFill;
+                _thermometers.Add(newThermo);
+
+                // Reconstruct solution based on SolutionFill
+                for (int i = 0; i < newThermo.SolutionFill && i < newThermo.Cells.Count; i++)
+                {
+                    _solution.Add(newThermo.Cells[i]);
+                }
+            }
+
+            _selectedThermometerIndex = -1;
+            Repaint();
+            Debug.Log($"Level {config.Id} loaded for modification");
         }
     }
 }

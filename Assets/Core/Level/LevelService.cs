@@ -6,7 +6,6 @@ namespace Core.Level
 {
      public class LevelService
     {
-        private readonly LevelStorage _levelStorage;
         private readonly PlayerDataManager _playerDataManager;
         private readonly GameConfig _gameConfig;
 
@@ -15,10 +14,9 @@ namespace Core.Level
         public event Action PreLevelComplete;
         public event Action OnLevelComplete;
 
-        public LevelService(LevelStorage levelStorage, PlayerDataManager playerDataManager,
+        public LevelService(PlayerDataManager playerDataManager,
             GameConfig gameConfig)
         {
-            _levelStorage = levelStorage;
             _playerDataManager = playerDataManager;
             _gameConfig = gameConfig;
         }

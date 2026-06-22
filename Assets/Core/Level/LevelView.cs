@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Core.Level.Thermometer;
 using Cysharp.Threading.Tasks;
+using Infrastructure.Configs;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,7 +21,8 @@ namespace Core.Level
         [SerializeField] private RectTransform _inputOverlay;
         [SerializeField] private RectTransform _playableArea;
         [SerializeField] private float _spacingRatio = 0.125f;
-        
+
+        private GameConfig _gameConfig;
         private LevelModel _model;
         private readonly Dictionary<ThermometerData, ThermometerView> _thermometerViews = new();
         
@@ -34,9 +36,10 @@ namespace Core.Level
             return _thermometerViews.TryGetValue(data, out var view) ? view : null;
         }
 
-        public void Initialize(LevelModel model)
+        public void Initialize(LevelModel model, GameConfig gameConfig)
         {
             _model = model;
+            _gameConfig = gameConfig;
             
             // Clear existing
             foreach (Transform child in _gridLayout.transform) Destroy(child.gameObject);
@@ -125,7 +128,7 @@ namespace Core.Level
             foreach (var thermometerData in model.Thermometers)
             {
                 var thermometerView = Instantiate(_thermometerViewPrefab, _thermometerViewRoot);
-                thermometerView.Initialize(thermometerData, stepSize);
+                thermometerView.Initialize(thermometerData, stepSize, _gameConfig);
                 thermometerView.UpdateCrosses(model);
                 
                 Thermometers.Add(thermometerView);

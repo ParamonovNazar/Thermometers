@@ -24,7 +24,7 @@ MonoBehaviour:
     - {x: 2, y: 0}
     - {x: 3, y: 0}
     - {x: 4, y: 0}
-    _color: {r: 1, g: 1, b: 1, a: 1}
+    _colorId: 0
     _solutionFill: 4
   - _cells:
     - {x: 0, y: 1}
@@ -32,7 +32,7 @@ MonoBehaviour:
     - {x: 2, y: 1}
     - {x: 3, y: 1}
     - {x: 4, y: 1}
-    _color: {r: 0.33072045, g: 0.06389154, b: 0.7499754, a: 1}
+    _colorId: 2
     _solutionFill: 2
   - _cells:
     - {x: 0, y: 2}
@@ -40,7 +40,7 @@ MonoBehaviour:
     - {x: 2, y: 2}
     - {x: 3, y: 2}
     - {x: 4, y: 2}
-    _color: {r: 0.08655215, g: 0.7381447, b: 0.25203493, a: 1}
+    _colorId: 3
     _solutionFill: 4
   - _cells:
     - {x: 0, y: 3}
@@ -48,7 +48,7 @@ MonoBehaviour:
     - {x: 2, y: 3}
     - {x: 3, y: 3}
     - {x: 4, y: 3}
-    _color: {r: 0.18882445, g: 0.5367972, b: 0.80378544, a: 1}
+    _colorId: 4
     _solutionFill: 3
   - _cells:
     - {x: 0, y: 4}
@@ -56,5 +56,5 @@ MonoBehaviour:
     - {x: 2, y: 4}
     - {x: 3, y: 4}
     - {x: 4, y: 4}
-    _color: {r: 0.50340277, g: 0.5605437, b: 0.9636276, a: 1}
+    _colorId: 7
     _solutionFill: 5

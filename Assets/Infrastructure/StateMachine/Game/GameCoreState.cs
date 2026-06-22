@@ -14,6 +14,7 @@ namespace Infrastructure.StateMachine.Game
 
         private readonly GameStateMachine _gameStateMachine;
         private readonly LevelService _levelService;
+        private readonly GameConfig _gameConfig;
         
         private LevelContext _levelContext;
 
@@ -21,10 +22,11 @@ namespace Infrastructure.StateMachine.Game
 
         public bool IsActive { get; private set; }
 
-        public GameCoreState(GameStateMachine gameStateMachine, LevelService levelService)
+        public GameCoreState(GameStateMachine gameStateMachine, LevelService levelService, GameConfig gameConfig)
         {
             _gameStateMachine = gameStateMachine;
             _levelService = levelService;
+            _gameConfig = gameConfig;
         }
 
         public void Enter()
@@ -52,7 +54,7 @@ namespace Infrastructure.StateMachine.Game
             if (_levelContext != null)
             {
                 var model = _levelService.CurrentLevelModel;
-                _levelContext.LevelView.Initialize(model);
+                _levelContext.LevelView.Initialize(model, _gameConfig);
                 _levelContext.InputController.Initialize(model);
                 
                 model.OnLevelSolved += Win;

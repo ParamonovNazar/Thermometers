@@ -11,7 +11,6 @@ namespace Infrastructure.Scopes
 {
     public class RootScope : LifetimeScope
     {
-        [SerializeField] private LevelStorage _levelStorage;
         [SerializeField] private GameConfig _gameConfig;
 
         protected override void Configure(IContainerBuilder builder)
@@ -19,7 +18,6 @@ namespace Infrastructure.Scopes
             builder.Register<PlayerDataManager>(Lifetime.Singleton);
             builder.Register<LevelService>(Lifetime.Singleton);
             builder.Register(resolver => resolver.Resolve<LevelService>().CurrentLevelModel, Lifetime.Singleton).AsSelf();
-            builder.RegisterInstance(_levelStorage);
             builder.RegisterInstance(_gameConfig);
 
             ConfigureStates(builder);

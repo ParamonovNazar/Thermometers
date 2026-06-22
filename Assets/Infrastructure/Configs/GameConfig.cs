@@ -11,6 +11,8 @@ namespace Infrastructure.Configs
         [field: SerializeField] public GameSettings Settings { get; set; }
         [field: SerializeField] public List<LevelGameConfig> Levels { get; set; } = new List<LevelGameConfig>();
         [field: SerializeField] public List<LevelGameConfig> LoopedLevels { get; set; } = new List<LevelGameConfig>();
+        [field: SerializeField] public List<IdColor> ColorPalette { get; set; } = new();
+        [field: SerializeField] public Color FallbackThermometerColor { get; set; } = new();
     }
 
     [Serializable]
@@ -24,5 +26,12 @@ namespace Infrastructure.Configs
     public class GameSettings
     {
         //parameters
+    }
+
+    [Serializable]
+    public class IdColor
+    {
+        [field: SerializeField] public int Id { get; set; }
+        [field: SerializeField] public Color Color { get; set; }
     }
 }
