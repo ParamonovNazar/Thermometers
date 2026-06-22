@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53b53b3f754943a9bd6c2ed89ba26f74, type: 3}
+  m_Name: Level 8
+  m_EditorClassIdentifier: Assembly-CSharp::Core.Level.LevelConfig
+  <Id>k__BackingField: Level 8
+  <Width>k__BackingField: 6
+  <Height>k__BackingField: 6
+  <RowConstraints>k__BackingField: 040000000300000006000000050000000300000002000000
+  <ColumnConstraints>k__BackingField: 040000000400000003000000040000000500000003000000
+  <Thermometers>k__BackingField:
+  - _cells:
+    - {x: 1, y: 0}
+    - {x: 1, y: 1}
+    - {x: 1, y: 2}
+    - {x: 1, y: 3}
+    - {x: 1, y: 4}
+    _colorId: 2
+    _solutionFill: 3
+  - _cells:
+    - {x: 4, y: 5}
+    - {x: 4, y: 4}
+    - {x: 4, y: 3}
+    - {x: 4, y: 2}
+    _colorId: 4
+    _solutionFill: 4
+  - _cells:
+    - {x: 0, y: 4}
+    - {x: 0, y: 3}
+    - {x: 0, y: 2}
+    _colorId: 6
+    _solutionFill: 3
+  - _cells:
+    - {x: 4, y: 1}
+    - {x: 5, y: 1}
+    _colorId: 0
+    _solutionFill: 0
+  - _cells:
+    - {x: 5, y: 0}
+    - {x: 4, y: 0}
+    _colorId: 7
+    _solutionFill: 2
+  - _cells:
+    - {x: 2, y: 1}
+    - {x: 3, y: 1}
+    _colorId: 7
+    _solutionFill: 2
+  - _cells:
+    - {x: 3, y: 0}
+    - {x: 2, y: 0}
+    _colorId: 4
+    _solutionFill: 0
+  - _cells:
+    - {x: 5, y: 2}
+    - {x: 5, y: 3}
+    - {x: 5, y: 4}
+    - {x: 5, y: 5}
+    _colorId: 8
+    _solutionFill: 2
+  - _cells:
+    - {x: 0, y: 1}
+    - {x: 0, y: 0}
+    _colorId: 3
+    _solutionFill: 0
+  - _cells:
+    - {x: 1, y: 5}
+    - {x: 0, y: 5}
+    _colorId: 8
+    _solutionFill: 1
+  - _cells:
+    - {x: 2, y: 2}
+    - {x: 2, y: 3}
+    - {x: 2, y: 4}
+    - {x: 2, y: 5}
+    _colorId: 0
+    _solutionFill: 2
+  - _cells:
+    - {x: 3, y: 2}
+    - {x: 3, y: 3}
+    - {x: 3, y: 4}
+    - {x: 3, y: 5}
+    _colorId: 3
+    _solutionFill: 3

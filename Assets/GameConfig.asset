@@ -13,9 +13,38 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: Assembly-CSharp::Infrastructure.Configs.GameConfig
   <Levels>k__BackingField:
-  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 6aa6aaad46e93714daf91208b999df3b, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 9b05bc1d7540ca943b2710df548b4e09, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: c530426be4f51e743a6908c7c7cc56b9, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 0ed2cf89687aeda47833b5f1af0b1c07, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: a95f5fcd21812f14ca084d58401206e7, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: cb224e3cd30ccbd4a8005201e2510a4a, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: fe718fa8f056d0b43870909a47f97b1e, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: ba99b7672acba0c4ab90b299551003a1, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: bd2caf6fcc4469d4eb92a19c7ff6ea09, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: baa3ca53f1809dc46bd684eff8066568, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 308f792c104710f44bba7395cb0b33a4, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: ef21be55a00369346a753d6fd80247de, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 7113748787d26e04b89a09ae9b7a7089, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: bac773a3231ff3148839d1a85dd391b5, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: a3e6194efeb1e4043ae2f43c0df6e371, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 5f325c98ad3c1e843814f9be82340f1c, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: cc2419f0dc8c95b499bad5fc6906c4c7, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 01ad65f4978c626489cf2c6f982fcfd5, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: f500134a7919efe438ac9daac4709377, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 4fd758a157e3ef7459e3afdae81883cc, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 7aaf212703cf2c442960227b7bad5556, type: 2}
   <LoopedLevels>k__BackingField:
-  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 6aa6aaad46e93714daf91208b999df3b, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 308f792c104710f44bba7395cb0b33a4, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: ef21be55a00369346a753d6fd80247de, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 7113748787d26e04b89a09ae9b7a7089, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: bac773a3231ff3148839d1a85dd391b5, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: a3e6194efeb1e4043ae2f43c0df6e371, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 5f325c98ad3c1e843814f9be82340f1c, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: cc2419f0dc8c95b499bad5fc6906c4c7, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 01ad65f4978c626489cf2c6f982fcfd5, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: f500134a7919efe438ac9daac4709377, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 4fd758a157e3ef7459e3afdae81883cc, type: 2}
+  - <LevelConfig>k__BackingField: {fileID: 11400000, guid: 7aaf212703cf2c442960227b7bad5556, type: 2}
   <ColorPalette>k__BackingField:
   - <Id>k__BackingField: 0
     <Color>k__BackingField: {r: 0.49019608, g: 0.5254902, b: 0.6392157, a: 1}
