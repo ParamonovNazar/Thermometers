@@ -16,7 +16,7 @@ MonoBehaviour:
   <Width>k__BackingField: 4
   <Height>k__BackingField: 4
   <RowConstraints>k__BackingField: 04000000030000000100000003000000
-  <ColumnConstraints>k__BackingField: 03000000030000000200000003000000
+  <ColumnConstraints>k__BackingField: 03000000040000000200000003000000
   <Thermometers>k__BackingField:
   - _cells:
     - {x: 0, y: 0}
@@ -24,28 +24,28 @@ MonoBehaviour:
     - {x: 0, y: 2}
     - {x: 1, y: 2}
     _color: {r: 1, g: 1, b: 1, a: 1}
-    _solutionFill: 2
+    _solutionFill: 0
   - _cells:
     - {x: 0, y: 3}
     - {x: 1, y: 3}
     - {x: 2, y: 3}
     - {x: 2, y: 2}
     _color: {r: 0.4957344, g: 0.22819021, b: 0.95510423, a: 1}
-    _solutionFill: 2
+    _solutionFill: 0
   - _cells:
     - {x: 1, y: 0}
     - {x: 2, y: 0}
     - {x: 3, y: 0}
     - {x: 3, y: 1}
     _color: {r: 0.13478686, g: 0.9179466, b: 0.3500872, a: 1}
-    _solutionFill: 3
+    _solutionFill: 0
   - _cells:
     - {x: 1, y: 1}
     - {x: 2, y: 1}
     _color: {r: 0.82605076, g: 0.2256079, b: 0.32557026, a: 1}
-    _solutionFill: 2
+    _solutionFill: 0
   - _cells:
     - {x: 3, y: 2}
     - {x: 3, y: 3}
     _color: {r: 0.15272202, g: 0.024447326, b: 0.76154363, a: 1}
-    _solutionFill: 2
+    _solutionFill: 0

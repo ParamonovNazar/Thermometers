@@ -48,11 +48,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edb5cbf128e14f1fb3ed0206b5da4ed6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Level.Thermometer.ThermometerView
-  _blobPrefab: {fileID: 6888711647736349152, guid: f8adf3a345c16944aa687d281c87866d, type: 3}
-  _straightPrefab: {fileID: 6698647435441566792, guid: b9d2e04c8b3dfb4449629b698cae8ca8, type: 3}
-  _turnRightPrefab: {fileID: 121672469520528958, guid: 1b77c184239ddaf49bd344014d431784, type: 3}
-  _turnLeftPrefab: {fileID: 121672469520528958, guid: c444b4e1ad2f9c14f8b98be7da4446bb, type: 3}
-  _endPrefab: {fileID: 8283876803856552355, guid: 99fb2918def61a349ac76bb3d788fbef, type: 3}
+  _blobPrefab: {fileID: 932758583746432881, guid: 7cf5c9cb357443f48a442c5c8dce9b55, type: 3}
+  _straightPrefab: {fileID: 932758583746432881, guid: 19930e0e11ad6844cb15dd392c644704, type: 3}
+  _turnRightPrefab: {fileID: 293411701661050531, guid: ad11eca1853df9c48a3ecac08bc969c6, type: 3}
+  _turnLeftPrefab: {fileID: 3464025612800584957, guid: 07e6e32d5f3d4bb4fa039864fa84d2c3, type: 3}
+  _endPrefab: {fileID: 932758583746432881, guid: 589d45cec130b6e43bb7244536fcea0e, type: 3}
   _partFillTime: 0.1
   _scaleCurve:
     serializedVersion: 2

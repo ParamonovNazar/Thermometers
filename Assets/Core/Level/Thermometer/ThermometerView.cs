@@ -21,6 +21,7 @@ namespace Core.Level.Thermometer
 
         private List<ThermometerPartBase> _parts = new();
         private List<Vector2Int> _cellCoords = new();
+        private ThermometerData _data;
 
         public int Length { get; private set; }
         public int CurrentFillIndex { get; private set; }
@@ -32,6 +33,7 @@ namespace Core.Level.Thermometer
 
         public void Initialize(ThermometerData data, float cellSize)
         {
+            _data = data;
             _cellCoords = new List<Vector2Int>(data.Cells);
             Length = data.Cells.Count;
             CurrentFillIndex = 0;
@@ -84,6 +86,15 @@ namespace Core.Level.Thermometer
                 part.SetFill(0);
                 part.SetScale(1f);
                 _parts.Add(part);
+            }
+        }
+
+        public void UpdateCrosses(LevelModel model)
+        {
+            for (int i = 0; i < Length; i++)
+            {
+                var state = model.GetCellState(_cellCoords[i]);
+                _parts[i].SetActiveCross(state == CellState.CrossedOut);
             }
         }
 

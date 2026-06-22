@@ -47,6 +47,7 @@ namespace Core.Level
             _thermometerViews.Clear();
 
             _model.OnThermometerFillChanged += HandleThermometerFillChanged;
+            _model.OnThermometerCrossChanged += HandleThermometerCrossChanged;
 
             // Calculate layout
             Rect rect = _playableArea.rect;
@@ -125,18 +126,19 @@ namespace Core.Level
             {
                 var thermometerView = Instantiate(_thermometerViewPrefab, _thermometerViewRoot);
                 thermometerView.Initialize(thermometerData, stepSize);
+                thermometerView.UpdateCrosses(model);
                 
                 Thermometers.Add(thermometerView);
                 _thermometerViews[thermometerData] = thermometerView;
             }
         }
-        
 
         private void OnDestroy()
         {
             if (_model != null)
             {
                 _model.OnThermometerFillChanged -= HandleThermometerFillChanged;
+                _model.OnThermometerCrossChanged -= HandleThermometerCrossChanged;
             }
         }
 
@@ -148,6 +150,14 @@ namespace Core.Level
             }
 
             UpdateConstraints();
+        }
+
+        private void HandleThermometerCrossChanged(ThermometerData thermometer, int index)
+        {
+            if (_thermometerViews.TryGetValue(thermometer, out var view))
+            {
+                view.UpdateCrosses(_model);
+            }
         }
 
         private void UpdateConstraints()
