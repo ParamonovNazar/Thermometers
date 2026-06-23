@@ -15,8 +15,8 @@ MonoBehaviour:
   <Id>k__BackingField: Level 8
   <Width>k__BackingField: 6
   <Height>k__BackingField: 6
-  <RowConstraints>k__BackingField: 040000000300000006000000050000000300000002000000
-  <ColumnConstraints>k__BackingField: 040000000400000003000000040000000500000003000000
+  <RowConstraints>k__BackingField: 030000000300000006000000050000000300000002000000
+  <ColumnConstraints>k__BackingField: 030000000400000003000000040000000500000003000000
   <Thermometers>k__BackingField:
   - _cells:
     - {x: 1, y: 0}

@@ -667,13 +667,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Level.Thermometer.ThermometerTurnPart
   _cross: {fileID: 5027152850279383694}
+  _crossShowCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _crossHideCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _crossAnimationDuration: 0.2
   _rootRectTransform: {fileID: 7600976957780941815}
   _scaleRoot: {fileID: 2863110643654716792}
   _straightRatio: 0.15
   _firstStraightRect: {fileID: 8602672085025599544}
   _secondStraightRect: {fileID: 4597064757150147238}
   _turnRect: {fileID: 4335983435820545937}
-  _borders: []
+  _borders:
+  - {fileID: 4834998132099447197}
+  - {fileID: 6252588180706153915}
+  - {fileID: 5876839880929402132}
   _segments:
   - FillImage: {fileID: 3668952287540450032}
     FillPart: 1

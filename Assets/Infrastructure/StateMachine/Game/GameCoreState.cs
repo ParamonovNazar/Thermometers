@@ -1,10 +1,11 @@
+using System;
 using Core.Level;
 using Cysharp.Threading.Tasks;
 using Infrastructure.Configs;
 using Infrastructure.TransitionScreen;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using VContainer.Unity;
+using Object = UnityEngine.Object;
 
 namespace Infrastructure.StateMachine.Game
 {
@@ -77,6 +78,7 @@ namespace Infrastructure.StateMachine.Game
 
         private async UniTask ShowVictoryScreen()
         {
+            await UniTask.Delay(TimeSpan.FromSeconds(0.75f));
             await _levelContext.VictoryScreen.Show();
             await TransitionView.Instance.Show();
             _gameStateMachine.Enter<GameCoreState>();
