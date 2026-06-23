@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Core.Level.Thermometer;
 using Cysharp.Threading.Tasks;
-using Infrastructure.Services.Haptic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using VContainer;
 using VContainer.Unity;
 
 namespace Core.Level.Input
@@ -23,6 +20,7 @@ namespace Core.Level.Input
 
         [field: SerializeField] public FillType FillType { get; set; } = FillType.Fill;
         [field: SerializeField] public DrawType DrawType { get; set; } = DrawType.Add;
+        public bool IsActive { get; set; }
 
         private IInputState _currentInputState;
         private FillState _fillState;
@@ -61,21 +59,29 @@ namespace Core.Level.Input
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            if (!IsActive) return;
+
             _currentInputState.OnPointerDown(eventData);
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            if (!IsActive) return;
+
             _currentInputState.OnPointerUp(eventData);
         }
 
         public void OnPointerMove(PointerEventData eventData)
         {
+            if (!IsActive) return;
+
             _currentInputState.OnPointerMove(eventData);
         }
 
         public void Hint()
         {
+            if(!IsActive) return;
+            
             var incorrectThermometers = _levelModel.Thermometers
                 .Where(t => _levelModel.GetThermometerFill(t) != t.SolutionFill)
                 .ToList();

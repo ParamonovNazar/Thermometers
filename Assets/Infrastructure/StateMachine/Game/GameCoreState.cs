@@ -57,6 +57,7 @@ namespace Infrastructure.StateMachine.Game
                 _levelContext.RebuildLayout();
                 _levelContext.LevelView.Initialize(model, _gameConfig);
                 _levelContext.InputController.Initialize(model);
+                _levelContext.InputController.IsActive = true;
 
                 model.OnLevelSolved += Win;
             }
@@ -64,6 +65,7 @@ namespace Infrastructure.StateMachine.Game
 
         private void Win()
         {
+            _levelContext.InputController.IsActive = false;
             if (_levelService.CurrentLevelModel != null)
             {
                 _levelService.CurrentLevelModel.OnLevelSolved -= Win;
