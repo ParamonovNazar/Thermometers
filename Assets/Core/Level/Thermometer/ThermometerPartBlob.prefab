@@ -104,6 +104,14 @@ PrefabInstance:
       propertyPath: _scaleHeight
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6911906990109265840, guid: a3522a4f54d683148a5c10d69d61fed2, type: 3}
+      propertyPath: m_Pivot.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6911906990109265840, guid: a3522a4f54d683148a5c10d69d61fed2, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

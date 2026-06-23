@@ -197,9 +197,10 @@ namespace Core.Level.Thermometer
             {
                 if (length > CurrentFillIndex)
                 {
+                    float remainingTime = 0f;
                     for (int i = CurrentFillIndex; i < length; i++)
                     {
-                        await FillPart(i, 1f, token);
+                        remainingTime = await FillPart(i, 1f, remainingTime, token);
                         if (_fillCancellationTokenSource.IsCancellationRequested)
                         {
                             Debug.Log("Fill cancelled");
@@ -215,10 +216,11 @@ namespace Core.Level.Thermometer
                 }
                 else
                 {
+                    float remainingTime = 0f;
                     for (int i = CurrentFillIndex; i >= length; i--)
                     {
                         CurrentFillIndex = i;
-                        await FillPart(i, 0f, token);
+                        remainingTime = await FillPart(i, 0f, remainingTime, token);
                         if (_fillCancellationTokenSource.IsCancellationRequested)
                         {
                             Debug.Log("deFill cancelled");
@@ -232,24 +234,26 @@ namespace Core.Level.Thermometer
             }
         }
 
-        private async UniTask FillPart(int index, float targetFill, CancellationToken token)
+        private async UniTask<float> FillPart(int index, float targetFill, float initialElapsed, CancellationToken token)
         {
             var part = _parts[index];
             float startFill = part.CurrentFillProgress;
 
             if (Mathf.Approximately(startFill, targetFill))
             {
-                return;
+                return initialElapsed;
             }
 
             float elapsed = targetFill > startFill ? startFill * _partFillTime : (1f - startFill) * _partFillTime;
+            elapsed += initialElapsed;
+
             while (elapsed < _partFillTime)
             {
-                elapsed += Time.deltaTime;
                 float progress = Mathf.Clamp01(elapsed / _partFillTime);
                 float current = Mathf.Lerp(startFill, targetFill, progress);
                 part.SetFill(current);
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
+                elapsed += Time.deltaTime;
             }
 
             if (token.IsCancellationRequested)
@@ -258,6 +262,7 @@ namespace Core.Level.Thermometer
             }
 
             part.SetFill(targetFill);
+            return elapsed - _partFillTime;
         }
 
         private async UniTaskVoid ScaleAnimate()

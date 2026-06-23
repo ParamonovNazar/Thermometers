@@ -15,7 +15,7 @@ namespace Infrastructure.Scopes
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.Register<PlayerDataManager>(Lifetime.Singleton);
+            builder.Register<PlayerDataManager>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
             builder.Register<LevelService>(Lifetime.Singleton);
             builder.Register(resolver => resolver.Resolve<LevelService>().CurrentLevelModel, Lifetime.Singleton).AsSelf();
             builder.RegisterInstance(_gameConfig);

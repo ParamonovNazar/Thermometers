@@ -48,5 +48,4 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
-  _levelStorage: {fileID: 11400000, guid: 08c92d84057a1504d96d26df377415af, type: 2}
   _gameConfig: {fileID: 11400000, guid: aa90da9d382beb145b7841b56413bc35, type: 2}
