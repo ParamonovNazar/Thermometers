@@ -9,6 +9,7 @@ namespace Core.Level
         [field: SerializeField] public LevelView LevelView { get; set; }
         [field: SerializeField] public InputController InputController { get; set; }
         [field: SerializeField] public RectTransform LayoutRect { get; set; }
+        [field: SerializeField] public VictoryScreen VictoryScreen { get; set; }
         public void RebuildLayout()
         {
             LayoutRebuilder.ForceRebuildLayoutImmediate(LayoutRect);

@@ -13,6 +13,8 @@ namespace Infrastructure.Configs
         [field: SerializeField] public List<LevelGameConfig> LoopedLevels { get; set; } = new List<LevelGameConfig>();
         [field: SerializeField] public List<IdColor> ColorPalette { get; set; } = new();
         [field: SerializeField] public Color FallbackThermometerColor { get; set; } = new();
+        [field: SerializeField] public List<string> VictoryScreenHeaders { get; set; } = new List<string>();
+        [field: SerializeField] public List<string> VictoryScreenDescriptions { get; set; } = new List<string>();
     }
 
     [Serializable]

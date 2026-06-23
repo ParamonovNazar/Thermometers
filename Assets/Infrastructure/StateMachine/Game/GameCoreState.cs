@@ -15,7 +15,7 @@ namespace Infrastructure.StateMachine.Game
         private readonly GameStateMachine _gameStateMachine;
         private readonly LevelService _levelService;
         private readonly GameConfig _gameConfig;
-        
+
         private LevelContext _levelContext;
 
         public LevelGameConfig CurrentLevelConfig { get; set; }
@@ -57,7 +57,7 @@ namespace Infrastructure.StateMachine.Game
                 _levelContext.RebuildLayout();
                 _levelContext.LevelView.Initialize(model, _gameConfig);
                 _levelContext.InputController.Initialize(model);
-                
+
                 model.OnLevelSolved += Win;
             }
         }
@@ -68,15 +68,22 @@ namespace Infrastructure.StateMachine.Game
             {
                 _levelService.CurrentLevelModel.OnLevelSolved -= Win;
             }
-            
+
             _levelService.CompleteLevel();
-            TransitToEnd().Forget(Debug.LogException);
+            ShowVictoryScreen().Forget(Debug.LogException);
         }
 
-        private async UniTask TransitToEnd()
+        private async UniTask ShowVictoryScreen()
+        {
+            await _levelContext.VictoryScreen.Show();
+            await TransitionView.Instance.Show();
+            _gameStateMachine.Enter<GameCoreState>();
+        }
+
+        private async UniTask TransitToMeta()
         {
             await TransitionView.Instance.Show();
-            _gameStateMachine.Enter<GameCoreEndState>();
+            _gameStateMachine.Enter<GameMetaState>();
         }
 
         public void Exit()
@@ -86,7 +93,7 @@ namespace Infrastructure.StateMachine.Game
 
         public void ReturnToMeta()
         {
-            TransitToEnd().Forget(Debug.LogException);
+            TransitToMeta().Forget(Debug.LogException);
         }
     }
 }

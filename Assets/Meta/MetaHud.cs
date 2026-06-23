@@ -18,6 +18,9 @@ namespace Meta
         [SerializeField] private TextMeshProUGUI _playButtonLabel;
         [SerializeField] private Animator _animator;
         [SerializeField] private float _appearTime;
+        [SerializeField] private RectTransform _connectionLine;
+        [SerializeField] private RectTransform _layout;
+        [SerializeField] private RectTransform _canvasRect;
 
         [SerializeField] private List<TextMeshProUGUI> _upcomingLevelLabels;
 
@@ -38,6 +41,7 @@ namespace Meta
 
         public void UpdateView()
         {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_layout);
             var currentLevelNumber = _levelService.GetCurrentLevelNumber();
             _playButtonLabel.text = $"Level {currentLevelNumber}";
 
@@ -45,6 +49,29 @@ namespace Meta
             {
                 _upcomingLevelLabels[index].text = $"{currentLevelNumber + index + 1}";
             }
+
+            UpdateConnectionLine();
+        }
+
+        public void UpdateConnectionLine()
+        {
+            if (_upcomingLevelLabels.Count == 0) return;
+
+            var startPoint = _playButton.GetComponent<RectTransform>().position;
+            var endPoint = _upcomingLevelLabels[^1].rectTransform.position;
+
+            var parent = _connectionLine.parent as RectTransform;
+            if (parent == null) return;
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, RectTransformUtility.WorldToScreenPoint(null, startPoint), null, out var localStart);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, RectTransformUtility.WorldToScreenPoint(null, endPoint), null, out var localEnd);
+
+            var direction = localEnd - localStart;
+            var distance = direction.magnitude;
+
+            _connectionLine.localPosition = localStart;
+            _connectionLine.sizeDelta = new Vector2(_connectionLine.sizeDelta.x, distance);
+            _connectionLine.up = _connectionLine.parent.TransformDirection(direction.normalized);
         }
 
         private void HandlePlayClick()

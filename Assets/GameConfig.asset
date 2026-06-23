@@ -64,4 +64,15 @@ MonoBehaviour:
     <Color>k__BackingField: {r: 0.5529412, g: 0.6627451, b: 0.81960785, a: 1}
   - <Id>k__BackingField: 8
     <Color>k__BackingField: {r: 0.7254902, g: 0.52156866, b: 0.67058825, a: 1}
-  <FallbackThermometerColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  <FallbackThermometerColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  <VictoryScreenHeaders>k__BackingField:
+  - Brilliant Move!
+  - Level Complete!
+  - Perfect Solution!
+  - Mind Mastered!
+  <VictoryScreenDescriptions>k__BackingField:
+  - Solved with patience. Finished with purpose.
+  - A clear mind turns challenges into solutions.
+  - Calm hands. Sharp mind. Task accomplished.
+  - No rush. No noise. Just a solution found.
+  - Steady focus. Clear thinking. A puzzle brought to its conclusion.

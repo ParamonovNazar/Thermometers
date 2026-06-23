@@ -22,7 +22,7 @@ namespace Infrastructure.StateMachine.Game
 
         private async UniTask TransitToNextState()
         {
-            var shouldStayInCore = false;
+            var shouldStayInCore = true;
 
             if (shouldStayInCore)
             {
