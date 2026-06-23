@@ -20,6 +20,7 @@ namespace Infrastructure.StateMachine.Game
         private LevelContext _levelContext;
 
         public LevelGameConfig CurrentLevelConfig { get; set; }
+        public LevelModel LevelModel { get; set; }
 
         public bool IsActive { get; private set; }
 
@@ -51,25 +52,25 @@ namespace Infrastructure.StateMachine.Game
 
         private void LoadLevel(LevelGameConfig currentLevelConfig)
         {
+            LevelModel = new LevelModel(CurrentLevelConfig.LevelConfig);
             _levelContext = Object.FindAnyObjectByType<LevelContext>();
             if (_levelContext != null)
             {
-                var model = _levelService.CurrentLevelModel;
                 _levelContext.RebuildLayout();
-                _levelContext.LevelView.Initialize(model, _gameConfig);
-                _levelContext.InputController.Initialize(model);
+                _levelContext.LevelView.Initialize(LevelModel, _gameConfig);
+                _levelContext.InputController.Initialize(LevelModel);
                 _levelContext.InputController.IsActive = true;
 
-                model.OnLevelSolved += Win;
+                LevelModel.OnLevelSolved += Win;
             }
         }
 
         private void Win()
         {
             _levelContext.InputController.IsActive = false;
-            if (_levelService.CurrentLevelModel != null)
+            if (LevelModel != null)
             {
-                _levelService.CurrentLevelModel.OnLevelSolved -= Win;
+                LevelModel.OnLevelSolved -= Win;
             }
 
             _levelService.CompleteLevel();

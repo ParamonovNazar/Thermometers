@@ -9,10 +9,9 @@ namespace Infrastructure.Scopes
     {
         private readonly GameStateMachine _gameStateMachine;
 
-        public GameEntryPoint(GameStateMachine gameStateMachine, PlayerDataManager playerDataManager)
+        public GameEntryPoint(GameStateMachine gameStateMachine)
         {
             _gameStateMachine = gameStateMachine;
-            HapticService.Initialize(playerDataManager);
         }
         
         public void Start()

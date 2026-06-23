@@ -1,4 +1,5 @@
 using Core.Level;
+using Core.Level.Input;
 using Infrastructure.Configs;
 using Infrastructure.Player;
 using Infrastructure.Services.Haptic;
@@ -17,7 +18,8 @@ namespace Infrastructure.Scopes
         {
             builder.Register<PlayerDataManager>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
             builder.Register<LevelService>(Lifetime.Singleton);
-            builder.Register(resolver => resolver.Resolve<LevelService>().CurrentLevelModel, Lifetime.Singleton).AsSelf();
+            builder.Register<HapticService>(Lifetime.Singleton);
+            builder.Register<InputStateFactory>(Lifetime.Singleton);
             builder.RegisterInstance(_gameConfig);
 
             ConfigureStates(builder);

@@ -1,5 +1,6 @@
 using Infrastructure.Services.Haptic;
 using UnityEngine;
+using VContainer;
 
 namespace General.CustomButton
 {
@@ -7,6 +8,8 @@ namespace General.CustomButton
     {
         [SerializeField] private UnityEngine.UI.Button _button;
 
+        [Inject] private HapticService HapticService { get; set; }
+        
         private void Awake()
         {
             _button.onClick.AddListener(PlayFeedback);
@@ -15,7 +18,7 @@ namespace General.CustomButton
         private void PlayFeedback()
         {
             //sounds
-            HapticService.Instance.Play(HapticType.Button);
+            HapticService.Play(HapticType.Button);
         }
 
         private void OnDestroy()

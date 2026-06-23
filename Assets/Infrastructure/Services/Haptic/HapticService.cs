@@ -8,21 +8,12 @@ namespace Infrastructure.Services.Haptic
         private readonly PlayerDataManager _playerDataManager;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-    private static AndroidJavaObject vibrator;
-    private static AndroidJavaClass vibrationEffectClass;
-    private static bool initialized = false;
+    private AndroidJavaObject vibrator;
+    private AndroidJavaClass vibrationEffectClass;
+    private bool initialized = false;
 #endif
 
-        private static HapticService _instance;
-        public static HapticService Instance => _instance;
-
-        
-        public static void Initialize(PlayerDataManager playerDataManager)
-        {
-            _instance = new HapticService(playerDataManager);
-        }
-        
-        private HapticService(PlayerDataManager playerDataManager)
+        public HapticService(PlayerDataManager playerDataManager)
         {
             _playerDataManager = playerDataManager;
             Init();
@@ -38,7 +29,7 @@ namespace Infrastructure.Services.Haptic
             Vibrate(type);
         }
 
-        private static void Vibrate(HapticType type)
+        private void Vibrate(HapticType type)
         {
             Debug.Log($"Vibrating with type: {type}");
             //  Medium   Vibrate(100, 100);
@@ -90,7 +81,7 @@ namespace Infrastructure.Services.Haptic
 #endif
         }
 
-        private static void Vibrate(long milliseconds, int amplitude = 255)
+        private void Vibrate(long milliseconds, int amplitude = 255)
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
         Init();
