@@ -14,8 +14,6 @@ namespace Core.Level
         [SerializeField] private ConstraintView _rowConstraintPrefab;
         [SerializeField] private ConstraintView _columnConstraintPrefab;
         [SerializeField] private FieldSizeView _fieldSizeViewPrefab;
-        [SerializeField] private Transform _rowConstraintsParent;
-        [SerializeField] private Transform _columnConstraintsParent;
         [SerializeField] private ThermometerView _thermometerViewPrefab;
         [SerializeField] private Transform _thermometerViewRoot;
         [SerializeField] private RectTransform _inputOverlay;
@@ -43,8 +41,6 @@ namespace Core.Level
             
             // Clear existing
             foreach (Transform child in _gridLayout.transform) Destroy(child.gameObject);
-            foreach (Transform child in _rowConstraintsParent) Destroy(child.gameObject);
-            foreach (Transform child in _columnConstraintsParent) Destroy(child.gameObject);
             foreach (Transform child in _thermometerViewRoot) Destroy(child.gameObject);
             Thermometers.Clear();
             _thermometerViews.Clear();

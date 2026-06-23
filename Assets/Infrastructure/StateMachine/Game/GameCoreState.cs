@@ -54,6 +54,7 @@ namespace Infrastructure.StateMachine.Game
             if (_levelContext != null)
             {
                 var model = _levelService.CurrentLevelModel;
+                _levelContext.RebuildLayout();
                 _levelContext.LevelView.Initialize(model, _gameConfig);
                 _levelContext.InputController.Initialize(model);
                 
@@ -81,6 +82,11 @@ namespace Infrastructure.StateMachine.Game
         public void Exit()
         {
             IsActive = false;
+        }
+
+        public void ReturnToMeta()
+        {
+            TransitToEnd().Forget(Debug.LogException);
         }
     }
 }

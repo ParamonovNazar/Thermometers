@@ -9,7 +9,7 @@ namespace Core.Level
         private readonly CellState[,] _cellStates;
         private readonly Dictionary<Vector2Int, ThermometerData> _cellToThermometer;
         private readonly HashSet<ThermometerData> _blockedThermometers = new();
-        
+
         public event System.Action<ThermometerData, int> OnThermometerFillChanged;
         public event System.Action<ThermometerData, int> OnThermometerCrossChanged;
         public event System.Action<Vector2Int, CellState> OnCellStateChanged;
@@ -55,7 +55,7 @@ namespace Core.Level
         public bool CanToggleCell(Vector2Int coord)
         {
             if (IsOutOfBounds(coord)) return false;
-            
+
             if (!_cellToThermometer.TryGetValue(coord, out var thermometer))
             {
                 return true; // Should not happen in a valid level, but allow it for non-thermometer cells if any
@@ -110,6 +110,7 @@ namespace Core.Level
                 {
                     if (_cellStates[x, y] == CellState.Filled) filledCount++;
                 }
+
                 if (filledCount != RowConstraints[y]) return false;
             }
 
@@ -121,6 +122,7 @@ namespace Core.Level
                 {
                     if (_cellStates[x, y] == CellState.Filled) filledCount++;
                 }
+
                 if (filledCount != ColumnConstraints[x]) return false;
             }
 
@@ -148,6 +150,7 @@ namespace Core.Level
             {
                 if (_cellStates[x, y] == CellState.Filled) filledCount++;
             }
+
             return filledCount == RowConstraints[y];
         }
 
@@ -159,6 +162,7 @@ namespace Core.Level
             {
                 if (_cellStates[x, y] == CellState.Filled) filledCount++;
             }
+
             return filledCount == ColumnConstraints[x];
         }
 
@@ -181,6 +185,7 @@ namespace Core.Level
                     break;
                 }
             }
+
             return fill;
         }
 
@@ -191,22 +196,24 @@ namespace Core.Level
             for (int i = 0; i < thermometer.Cells.Count; i++)
             {
                 var cell = thermometer.Cells[i];
-                var newState = i < targetLength ? CellState.Filled : CellState.Empty;
+                var oldState = _cellStates[cell.x, cell.y];
+                var newState = i < targetLength ? CellState.Filled
+                    : oldState == CellState.Filled ? CellState.Empty : oldState;
                 _cellStates[cell.x, cell.y] = newState;
             }
-            
+
             OnThermometerFillChanged?.Invoke(thermometer, targetLength);
-            
+
             CheckWin();
         }
 
         public void SetCellState(Vector2Int coord, CellState state)
         {
             if (IsOutOfBounds(coord)) return;
-            
+
             _cellStates[coord.x, coord.y] = state;
             OnCellStateChanged?.Invoke(coord, state);
-            
+
             CheckWin();
         }
 
@@ -223,7 +230,7 @@ namespace Core.Level
                     _cellStates[cell.x, cell.y] = CellState.CrossedOut;
                 }
             }
-            
+
             OnThermometerCrossChanged?.Invoke(thermometer, crossFromIndex);
         }
 
@@ -240,7 +247,7 @@ namespace Core.Level
                     _cellStates[cell.x, cell.y] = CellState.Empty;
                 }
             }
-            
+
             OnThermometerCrossChanged?.Invoke(thermometer, clearToIndex);
         }
 

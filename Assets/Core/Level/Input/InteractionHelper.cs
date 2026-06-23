@@ -1,3 +1,4 @@
+using System;
 using Infrastructure.Services.Haptic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -50,19 +51,25 @@ namespace Core.Level.Input
             cellPosition = default;
             return false;
         }
-        
+
         public void UpdateThermometerFill(ThermometerData thermometer, Vector2Int cellPosition, DrawType drawType)
         {
             var drawModifier = drawType == DrawType.Remove ? 0 : 1;
-            var length = Mathf.Max(0, thermometer.GetLengthToCell(cellPosition) + drawModifier);
-            
+            var index = thermometer.GetLengthToCell(cellPosition);
+            var length = Mathf.Max(0, index + drawModifier);
+
             if (_levelModel.GetThermometerFill(thermometer) == length)
             {
                 return;
             }
 
-            _levelModel.SetThermometerFill(thermometer, length);
+            if (drawType == DrawType.Add)
+            {
+                _levelModel.ClearThermometerCross(thermometer, index);
+            }
             
+            _levelModel.SetThermometerFill(thermometer, length);
+
             HapticService.Instance.Play(HapticType.ThermometerInteraction);
         }
 
@@ -73,11 +80,25 @@ namespace Core.Level.Input
                 int index = thermometer.GetLengthToCell(cellPosition);
                 if (drawType == DrawType.Add)
                 {
-                    _levelModel.SetThermometerCross(thermometer, index);
+                    switch (_levelModel.GetCellState(cellPosition))
+                    {
+                        case CellState.Empty:
+                            _levelModel.SetThermometerCross(thermometer, index);
+                            break;
+                        case CellState.Filled:
+                            UpdateThermometerFill(thermometer, cellPosition, DrawType.Remove);
+                            _levelModel.SetThermometerCross(thermometer, index);
+                            break;
+                        case CellState.CrossedOut:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
                 else
                 {
-                    _levelModel.ClearThermometerCross(thermometer, index);
+                    if (_levelModel.GetCellState(cellPosition) == CellState.CrossedOut)
+                        _levelModel.ClearThermometerCross(thermometer, index);
                 }
             }
             else
@@ -90,7 +111,7 @@ namespace Core.Level.Input
                     _levelModel.SetCellState(cellPosition, newState);
                 }
             }
-            
+
             HapticService.Instance.Play(HapticType.ThermometerInteraction);
         }
     }
