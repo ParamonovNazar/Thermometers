@@ -17,8 +17,8 @@ namespace Core.Level
 
         public void Setup(int currentValue, int targetValue)
         {
-            SetCurrentValue(currentValue);
             SetTargetValue(targetValue);
+            SetCurrentValue(currentValue);
         }
 
         public void SetCurrentValue(int currentValue)
